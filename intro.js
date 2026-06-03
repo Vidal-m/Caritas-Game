@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Sequência exata de diálogos baseada nas tuas telas
     const dialogos = [
-        "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha vossa ditará o peso da vossa alma...",
-        "Vejam acima: Cada espírito possui um tempo de encarnação (azul), pontos materiais (verde) e orgulho moral (rosa).",
+        "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha vossa ditará o termino da vossa jornada...",
+        "Vejam acima: Cada espírito possui um tempo de encarnação (azul), orgulho moral (rosa) e pontos materiais (verde).",
         "No melhor cenário, vós purificais a matéria e o orgulho, doando o vosso último suspiro de tempo em prol do próximo para ascender.",
         "No pior cenário, as ilusões do mundo acumulam-se e o vosso tempo esgota-se antes da purificação... o que vos levará ao Umbral."
     ];
