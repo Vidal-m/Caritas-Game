@@ -66,13 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
             switch(currentSlide) {
                 case 0:
                     statusDemo.style.display = "none";
-                    gmImg.src = "assets/game_master_neutra.png";
+                    gmImg.src = "assets/game-master/game_master_olhos_fechados.png";
                     break;
 
                 case 1:
                     statusDemo.style.display = "flex";
                     playerImg.src = "assets/player1/player1-1material-1moral-3temporal.png";
-                    gmImg.src = "assets/game_master_explicando.png";
+                    gmImg.src = "assets/game-master/game_master_de_boca_fechada.png";
                     break;
 
                 case 2:
@@ -80,8 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     barBlue.classList.add("best");
                     barPink.classList.add("best");
                     barGreen.classList.add("best");
-                    playerImg.src = "assets/player1/player1-feliz.png"; 
-                    gmImg.src = "assets/game_master_sorrindo.png";
+                    playerImg.src = "assets/player1/best-player1.png"; 
+                    gmImg.src = "assets/game-master/game_master_sorriso_largo.png";
                     break;
 
                 case 3:
@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     barBlue.classList.add("worst");
                     barPink.classList.add("worst");
                     barGreen.classList.add("worst");
-                    playerImg.src = "assets/player1/player1-preocupado.png"; 
-                    gmImg.src = "assets/game_master_seria.png";
+                    playerImg.src = "assets/player1/worst-player1.png"; 
+                    gmImg.src = "assets/game-master/game_master_refletindo.png";
                     break;
             }
 
