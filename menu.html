@@ -11,7 +11,7 @@
         .container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; }
         
         /* Mantém a mesma imagem ao fundo com opacidade reduzida para destacar o menu */
-        .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0.15; z-index: 1; padding: 20px; }
+        .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0.25; z-index: 1; padding: 20px; }
         
         /* Layout alinhado verticalmente à esquerda conforme os teus wireframes */
         .menu-lateral { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 20px; margin-left: 10%; width: 450px; }
@@ -42,7 +42,7 @@
             <!-- N Jogadores -->
             <div class="row-config">
                 <div class="btn-label">Número de jogadores</div>
-                <input type="number" id="players-qty" class="box-value" min="3" max="6" placeholder="...">
+                <input type="number" id="players-qty" class="box-value" min="3" max="6" placeholder="3 - 6">
             </div>
 
             <!-- Tema (Fixo valor 1 conforme wireframe) -->

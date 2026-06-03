@@ -14,15 +14,15 @@
         .btn-skip { position: absolute; top: 30px; right: 40px; padding: 10px 25px; font-weight: bold; font-size: 1rem; border: 2px solid #1a1a1a; background: #fff; border-radius: 12px; cursor: pointer; }
         
         /* Ilustração da Caridade (Alinhada à direita e acima da caixa de diálogo) */
-        .gm-avatar { position: absolute; right: 15%; bottom: 220px; height: 350px; z-index: 1; }
+        .gm-avatar { position: relative; right: -10%; bottom: 0px; height: 350px; z-index: 2; }
         
         /* Elementos gráficos das barras de status no canto superior esquerdo (surgem no slide 2) */
         .status-preview { position: absolute; top: 40px; left: 50px; display: none; flex-direction: column; gap: 8px; }
         .preview-circle { width: 45px; height: 45px; background: #e5e7eb; border-radius: 50%; border: 2px solid #1a1a1a; margin-bottom: 5px; }
         .preview-bar { height: 8px; border-radius: 4px; }
-        .bar-blue { width: 90px; background: #3b82f6; }
-        .bar-green { width: 130px; background: #10b981; }
-        .bar-pink { width: 110px; background: #ec4899; }
+        .bar-blue { width: 120px; background: #3b82f6; }
+        .bar-pink { width: 120px; background: #ec4899; }
+        .bar-green { width: 120px; background: #10b981; }
 
         /* Caixa de diálogo inferior idêntica ao teu wireframe */
         .dialog-box { position: relative; z-index: 2; width: 80%; max-width: 900px; min-height: 140px; background: #f4ebe6; border: 4px solid #1a1a1a; border-radius: 24px; padding: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
@@ -38,11 +38,11 @@
         <div class="status-preview" id="status-demo">
             <div class="preview-circle"></div>
             <div class="preview-bar bar-blue"></div>
-            <div class="preview-bar bar-green"></div>
             <div class="preview-bar bar-pink"></div>
+            <div class="preview-bar bar-green"></div>
         </div>
 
-        <img src="game_master.png" alt="Caridade GM" class="gm-avatar">
+        <img src="assets/game master intro.png" alt="Caridade GM" class="gm-avatar">
 
         <div class="dialog-box" id="dialog-trigger">
             <p class="dialog-text" id="bubble-content">Carregando introdução espiritual...</p>
