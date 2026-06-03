@@ -6,74 +6,177 @@
     <title>Caritas Game - Tabuleiro</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { width: 100%; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fafafa; color: #1a1a1a; }
+        body { 
+            width: 100%; 
+            height: 100vh; 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: #fff; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+        }
+
+        /* Contador de Fases no Topo */
+        .fase-header { margin-top: 10px; margin-bottom: 20px; }
+        .fase-badge { 
+            background: #f4ebe6; 
+            border: 3px solid #1a1a1a; 
+            border-radius: 12px; 
+            padding: 8px 30px; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+        }
+
+        /* Container de Jogadores Lado a Lado */
+        .players-container { 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-end; 
+            gap: 30px; 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: auto 0;
+            transition: all 0.4s ease-in-out; 
+        }
+
+        /* Card do Jogador Base */
+        .player-card { 
+            background: #fdf8f5; 
+            border: 3px solid #1a1a1a; 
+            border-radius: 32px; 
+            padding: 25px 20px; 
+            width: 230px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            opacity: 0.5; 
+            transform: scale(0.9); 
+        }
+
+        /* 🌟 CLASSE DE DESTAQUE: O jogador ativo ganha vida */
+        .player-card.active { 
+            opacity: 1; 
+            transform: scale(1.1); 
+            border-width: 4px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
+        }
+
+        /* Jogador Eliminado/Desencarnado */
+        .player-card.dead {
+            opacity: 0.15 !important;
+            transform: scale(0.8) !important;
+            background: #e5e7eb;
+        }
+
+        .avatar-placeholder { 
+            width: 95px; 
+            height: 95px; 
+            border-radius: 50%; 
+            border: 3px solid #1a1a1a; 
+            background: #fff; 
+            overflow: hidden; 
+            margin-bottom: 12px; 
+        }
+        .avatar-placeholder img { width: 100%; height: 100%; object-fit: cover; }
         
-        .game-layout { display: flex; flex-direction: column; height: 100vh; padding: 30px; justify-content: space-between; }
+        .player-name { font-weight: bold; margin-bottom: 12px; font-size: 1.1rem; color: #1a1a1a; }
+
+        /* Barras de Status Individuais */
+        .player-bars { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+        .bar-container { display: flex; flex-direction: column; gap: 3px; }
+        .bar-label { font-size: 0.75rem; font-weight: bold; color: #4b5563; }
+        .bar-bg { width: 100%; height: 12px; background: #e5e7eb; border: 1.5px solid #1a1a1a; border-radius: 6px; overflow: hidden; }
+        .bar-fill { height: 100%; width: 100%; transition: width 0.5s ease-in-out, background-color 0.5s ease; }
         
-        /* Painel Superior com Status do Jogador Ativo */
-        .hud-superior { display: flex; align-items: flex-start; gap: 20px; }
-        .avatar-placeholder { width: 60px; height: 60px; background: #e5e7eb; border-radius: 50%; border: 2px solid #1a1a1a; }
-        .bars-container { display: flex; flex-direction: column; gap: 6px; font-weight: bold; font-size: 0.9rem; }
-        
-        .stat-line { display: flex; align-items: center; gap: 10px; }
-        .bar-bg { width: 150px; height: 12px; background: #e5e7eb; border: 1.5px solid #1a1a1a; border-radius: 6px; overflow: hidden; }
-        .bar-fill { height: 100%; transition: width 0.4s ease; }
-        
-        /* Cores das Barras */
         .fill-temporal { background: #3b82f6; }
-        .fill-material { background: #10b981; }
         .fill-moral { background: #ec4899; }
+        .fill-material { background: #10b981; }
 
-        /* Centro: Caixa de Pergunta e Alternativas Laterais */
-        .quiz-container { display: flex; flex-direction: column; align-items: center; gap: 25px; margin: auto 0; }
-        .question-box { width: 85%; max-width: 800px; background: #fff; border: 3px solid #1a1a1a; border-radius: 16px; padding: 25px; text-align: center; font-size: 1.3rem; font-weight: bold; }
+        /* Caixa de Pergunta Inferior (Fase de Destaque) */
+        .pergunta-container { 
+            margin-top: auto; 
+            margin-bottom: 40px; 
+            width: 80%; 
+            max-width: 850px; 
+            background: #f4ebe6; 
+            border: 4px solid #1a1a1a; 
+            border-radius: 20px; 
+            padding: 25px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.4s ease;
+        }
+        .pergunta-text { 
+            font-size: 1.35rem; 
+            font-weight: bold; 
+            color: #1a1a1a; 
+            line-height: 1.5; 
+            white-space: normal;       
+            word-break: break-word;    
+        }
+
+        /* 🔄 Transição da Pergunta para o Topo (Fase de Resposta) */
+        .pergunta-container.no-topo { margin-top: 10px; margin-bottom: 20px; }
+
+        /* Grelha de Alternativas (2x2) */
+        .options-container { width: 80%; max-width: 850px; margin-top: 10px; margin-bottom: auto; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        .options-grid { display: flex; flex-direction: column; gap: 12px; width: 85%; max-width: 500px; }
-        .option-btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: bold; background: #fff; border: 2px solid #1a1a1a; border-radius: 12px; cursor: pointer; text-align: left; transition: background 0.2s; }
-        .option-btn:hover { background: #f3f4f6; }
+        .option-btn { 
+            background: #f4ebe6; 
+            border: 3px solid #1a1a1a; 
+            border-radius: 16px; 
+            padding: 22px; 
+            font-size: 1.15rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-align: left;
+            line-height: 1.4;
+            transition: transform 0.2s, background-color 0.2s; 
+        }
+        .option-btn:hover { background: #fef08a; transform: translateY(-3px); }
 
-        /* Fim de jogo modal simples */
-        .modal-end { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 20px; }
-        .modal-content { background: #1a1a1a; border: 3px solid #fff; padding: 40px; border-radius: 20px; max-width: 500px; }
-        .modal-content button { margin-top: 20px; padding: 10px 25px; font-weight: bold; cursor: pointer; }
+        /* Utilitários */
+        .hidden { display: none !important; }
+
+        /* Modal Fim de Jogo */
+        .modal-end { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 20px; }
+        .modal-content { background: #1a1a1a; border: 3px solid #fff; padding: 40px; border-radius: 24px; max-width: 550px; width: 100%; }
+        .modal-content h2 { font-size: 2rem; margin-bottom: 15px; }
+        .modal-content p { font-size: 1.1rem; line-height: 1.6; margin-bottom: 25px; color: #d1d5db; }
+        .modal-content button { background: #fff; color: #1a1a1a; border: none; padding: 12px 30px; font-weight: bold; font-size: 1rem; border-radius: 12px; cursor: pointer; transition: background 0.2s; }
+        .modal-content button:hover { background: #e5e7eb; }
     </style>
 </head>
 <body>
 
-    <div class="game-layout">
-        <div class="hud-superior">
-            <div class="avatar-placeholder"></div>
-            <div class="bars-container">
-                <div id="player-name" style="font-size: 1.2rem; margin-bottom: 4px;">Jogador 1</div>
-                
-                <div class="stat-line">
-                    <span>⏳ Tempo:</span>
-                    <div class="bar-bg"><div id="bar-temp" class="bar-fill fill-temporal"></div></div>
-                </div>
-                <div class="stat-line">
-                    <span>📦 Matéria:</span>
-                    <div class="bar-bg"><div id="bar-mat" class="bar-fill fill-material"></div></div>
-                </div>
-                <div class="stat-line">
-                    <span>⚖️ Orgulho:</span>
-                    <div class="bar-bg"><div id="bar-mor" class="bar-fill fill-moral"></div></div>
-                </div>
-                <div style="font-size: 0.8rem; color: #666; margin-top: 2px;">Camada Atual: <span id="layer-indicator">1</span></div>
-            </div>
-        </div>
+    <div class="fase-header">
+        <div class="fase-badge" id="fase-contador">Fase 1</div>
+    </div>
 
-        <div class="quiz-container">
-            <div class="question-box" id="question-text">Buscando pergunta da camada...</div>
-            <div class="options-grid" id="options-box">
-                </div>
+    <div class="players-container" id="painel-jogadores"></div>
+
+    <div class="pergunta-container" id="caixa-pergunta">
+        <p class="pergunta-text" id="texto-pergunta">A carregar pergunta...</p>
+    </div>
+
+    <div class="options-container hidden" id="painel-opcoes">
+        <div class="options-grid" id="grid-alternativas">
+            <button class="option-btn" data-idx="0"></button>
+            <button class="option-btn" data-idx="1"></button>
+            <button class="option-btn" data-idx="2"></button>
+            <button class="option-btn" data-idx="3"></button>
         </div>
     </div>
 
     <div class="modal-end" id="end-screen">
         <div class="modal-content">
-            <h2 id="end-title">Fim da Jornada</h2>
-            <p id="end-desc" style="margin-top: 15px; line-height: 1.5;"></p>
-            <button onclick="window.location.href='index.html'">Voltar ao Início</button>
+            <h2 id="end-title">Transição Concluída</h2>
+            <p id="end-desc"></p>
+            <button id="btn-modal-action">Continuar</button>
         </div>
     </div>
 
