@@ -57,7 +57,7 @@ fase3 = {
     ],
         
     'O que é a obsessão espiritual?':[
-        'Correta: O domínio que alguns Espíritos inferiores conseguem exercer sobre certas pessoas.',
+        'O domínio que alguns Espíritos inferiores conseguem exercer sobre certas pessoas.',
         'Uma doença mental causada exclusivamente por fatores genéticos e biológicos.',
         'Um feitiço feito com objetos materiais que prende um Espírito a alguém.',
         'Um castigo divino enviado para testar a fé dos pecadores.',
@@ -71,37 +71,76 @@ fase3 = {
     ],
 }
 
-game_fases = [fase1, fase2, fase3];
+const game_fases = [fase1, fase2, fase3];
+
+class Player {
+    constructor(nome) {
+        this.name = nome;
+        
+        // Configuração exata do Nível Base (V1)
+        this.point_temporal = 3;  // 3 unidades de tempo (rodadas)
+        this.point_material = 1;  // 1 unidade de peso material
+        this.point_moral = 1;     // 1 unidade de orgulho
+        
+        this.fase_atual = 1;      // Começa na Fase 1
+        
+        // Histórico para controle das perguntas individuais
+        this.perguntas_respondidas_por_fase = { 1: 0, 2: 0, 3: 0 };
+    }
+}
 
 class Game {
     constructor(nbr_players, game_theme, game_level) {
-        this.players = [];
-        for (let i = 0; i < nbr_players; i++)
-            this.players.push(new Player(game_level));
         this.theme = game_theme;
         this.level = game_level;
+        this.players = [];
+
+        for (let i = 0; i < nbr_players; i++)
+            this.players.push(new Player(`Player ${i+1}`));
+
+        this.player_atual_index = 0;
+        this.pergunta_atual_index = 0;
     }
 
-
-    loop(phase_nbr) {
-        for (let i = 0; i < this.game_level; i++) {
-            for (let j = 0; j < this.players.length; j++) {
-                console.log(`Player ${j+1} - Phase ${phase_nbr} - Question: ${game_fases[phase_nbr-1][Object.keys(game_fases[phase_nbr-1])[i]][0]}`);
-            }
+    turn_game(){
+        if (this.player_atual_index >= this.players.length) {
+            // Todos os jogadores jogaram esta rodada
+            this.player_atual_index = 0;
+            this.pergunta_atual_index++;
         }
+
+        // Verifica se o jogo acabou com base no nível (número de perguntas)
+        if (this.pergunta_atual_index >= this.level) {
+            console.log("Fim da partida! Vamos verificar o destino das almas.");
+            return;
+        }
+
+        let jogador = this.players[this.player_atual_index];
+        let fase_do_jogador = jogador.fase_atual; // Fase 1, 2 ou 3
+        
+        // Captura o banco de perguntas da fase correspondente
+        let perguntas_fase = game_fases[fase_do_jogador - 1];
+        let chaves_perguntas = Object.keys(perguntas_fase);
+        
+        // Seleciona a pergunta atual
+        let pergunta_texto = chaves_perguntas[this.pergunta_atual_index];
+        
+        // A opção correta está sempre no índice 0 por padrão na tua estrutura
+        let resposta_correta = perguntas_fase[pergunta_texto][0]; 
+
+        console.log(`--- Turno de ${jogador.name} ---`);
+        console.log(`Fase Atual: ${fase_do_jogador}`);
+        console.log(`Pergunta: ${pergunta_texto}`);
+        console.log(`Resposta Correta Esperada: ${resposta_correta}`);
+
+        // Avança o index para o próximo jogador clicar no botão na interface depois
+        this.player_atual_index++;
     }
 }
 
-class Player {
-    constructor(player_level) {
-        this.name = 'default';
 
-        this.point_temporal = player_level * 3;
-        this.point_material = player_level;
-        this.point_moral = player_level;
-    }
-}
+const game = new Game(2, 'Espiritismo', 3);
 
-game = new Game(2, 'Espiritismo', 3);
-
-game.loop(3);
+game.turn_game(); // Jogador 1 - Pergunta 1
+game.turn_game(); // Jogador 2 - Pergunta 1
+game.turn_game(); // Jogador 1 - Pergunta 2
