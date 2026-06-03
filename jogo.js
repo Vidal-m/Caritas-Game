@@ -1,4 +1,4 @@
-// --- BANCO DE DADOS DAS QUESTÕES PERFEITO ---
+// --- BANCO DE DADOS DE QUESTÕES FILOSÓFICAS ---
 const fase1 = {
     'O que é Deus?': ['É a inteligência suprema, causa primária de todas as coisas.', 'Um conjunto de deuses que governam o universo.', 'Uma força da natureza criada pela mente humana coletiva.', 'Um homem ancião que vive sentado num trono cósmico.'],
     'Como Deus criou o Universo?': ['Pela Sua vontade, utilizando o fluido cósmico universal.', 'Num processo físico que durou exatamente seis dias de 24 horas.', 'Através de um acidente químico sem qualquer planeamento.', 'Moldando cada planeta com as próprias mãos.']
@@ -16,7 +16,7 @@ const fase3 = {
 
 const game_fases = [fase1, fase2, fase3];
 
-// --- MODELO DO JOGADOR (Faltava este bloco!) ---
+// --- CLASSE DO JOGADOR ESPIRITUAL ---
 class Player {
     constructor(id) {
         this.id = id;
@@ -27,6 +27,9 @@ class Player {
         this.fase_atual = 1;
         this.index_pergunta = 0;
         this.status_final = null; 
+
+        // 🖼️ Foto Dinâmica Retangular baseada no número do jogador (Ex: player1.png, player2.png)
+        this.foto = `assets/player${id}.png`; 
     }
 
     obterPergunta() {
@@ -39,14 +42,14 @@ class Player {
         let alternativas = [...banco[qText]];
         let correta = alternativas[0];
 
-        // Embaralha as opções para o desafio ser real
+        // Embaralha as alternativas para o desafio do utilizador
         alternativas.sort(() => Math.random() - 0.5);
 
         return { texto: qText, opcoes: alternativas, certa: correta };
     }
 }
 
-// --- GESTÃO DA INTERFACE E FLUXO ---
+// --- MOTOR DE CONTROLO DO TABULEIRO ---
 document.addEventListener("DOMContentLoaded", () => {
     const totalJogadores = parseInt(localStorage.getItem("caritas_total_jogadores") || "3", 10);
     const painelJogadores = document.getElementById("painel-jogadores");
@@ -64,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let jogadorAtualIndex = 0;
     let perguntaAtualValida = null;
 
-    // Constrói os cards dos jogadores dinamicamente no HTML
+    // Injeção de HTML respeitando a nova estrutura de imagem total (sangrada)
     function construirCards() {
         painelJogadores.innerHTML = "";
         listaJogadores.forEach(p => {
@@ -74,21 +77,24 @@ document.addEventListener("DOMContentLoaded", () => {
             
             card.innerHTML = `
                 <div class="avatar-placeholder">
-                    <img src="assets/player1/image_a44d0a.jpg" alt="${p.name}">
+                    <img src="${p.foto}" alt="${p.name}">
                 </div>
-                <div class="player-name">${p.name}</div>
-                <div class="player-bars">
-                    <div class="bar-container">
-                        <span class="bar-label">⏳ Tempo</span>
-                        <div class="bar-bg"><div class="bar-fill fill-temporal" id="bar-temp-${p.id}"></div></div>
-                    </div>
-                    <div class="bar-container">
-                        <span class="bar-label">📦 Matéria</span>
-                        <div class="bar-bg"><div class="bar-fill fill-material" id="bar-mat-${p.id}"></div></div>
-                    </div>
-                    <div class="bar-container">
-                        <span class="bar-label">⚖️ Orgulho</span>
-                        <div class="bar-bg"><div class="bar-fill fill-moral" id="bar-mor-${p.id}"></div></div>
+                
+                <div class="player-info-block">
+                    <div class="player-name">${p.name}</div>
+                    <div class="player-bars">
+                        <div class="bar-container">
+                            <span class="bar-label">⏳ Tempo</span>
+                            <div class="bar-bg"><div class="bar-fill fill-temporal" id="bar-temp-${p.id}"></div></div>
+                        </div>
+                        <div class="bar-container">
+                            <span class="bar-label">📦 Matéria</span>
+                            <div class="bar-bg"><div class="bar-fill fill-material" id="bar-mat-${p.id}"></div></div>
+                        </div>
+                        <div class="bar-container">
+                            <span class="bar-label">⚖️ Orgulho</span>
+                            <div class="bar-bg"><div class="bar-fill fill-moral" id="bar-mor-${p.id}"></div></div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -99,27 +105,27 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderizarTurno() {
         let jog = listaJogadores[jogadorAtualIndex];
 
-        // Se o jogador atual já encerrou a linha do tempo, salta o turno dele
+        // Validação: se o espírito atual ficou sem tempo, pula o seu turno
         if (jog.point_temporal <= 0 || jog.status_final) {
             passarTurno();
             return;
         }
 
-        // Restaura estados visuais para o início de cada turno
+        // Restaura e limpa a tela para a fase de Destaque inicial
         painelOpcoes.classList.add("hidden");
         caixaPergunta.classList.remove("no-topo");
         painelJogadores.classList.remove("hidden");
 
         contadorFase.textContent = `Fase ${jog.fase_atual}`;
         
-        // Atualiza as classes de Destaque e o preenchimento das barras
+        // Atualiza a barra gráfica e as classes CSS de ampliação (.active)
         listaJogadores.forEach((p, idx) => {
             const card = document.getElementById(`card-p${p.id}`);
             if (!card) return;
 
             card.className = "player-card";
 
-            // Atualiza larguras das barras baseadas nas variáveis numéricas do jogador
+            // Transforma os pontos inteiros (0 a 3) em percentagem gráfica real para o CSS
             document.getElementById(`bar-temp-${p.id}`).style.width = `${(p.point_temporal / 3) * 100}%`;
             document.getElementById(`bar-mat-${p.id}`).style.width = `${p.point_material * 100}%`;
             document.getElementById(`bar-mor-${p.id}`).style.width = `${p.point_moral * 100}%`;
@@ -127,22 +133,20 @@ document.addEventListener("DOMContentLoaded", () => {
             if (p.point_temporal <= 0 || p.status_final) {
                 card.classList.add("dead");
             } else if (idx === jogadorAtualIndex) {
-                card.classList.add("active"); // Zoom no player da vez!
+                card.classList.add("active"); // Destaca e dá zoom ao player da vez
             }
         });
 
-        // Prepara a pergunta direcionada
         perguntaAtualValida = jog.obterPergunta();
         textoPergunta.textContent = `Pergunta para o ${jog.name}`;
     }
 
-    // Transição: Clicar no balão inferior oculta perfis e abre a grelha 2x2
+    // Evento de Clique no Balão Inferior: Transita para a grelha de alternativas 2x2
     caixaPergunta.addEventListener("click", () => {
         if (painelOpcoes.classList.contains("hidden")) {
             painelJogadores.classList.add("hidden");
             caixaPergunta.classList.add("no-topo");
             
-            // Injeta o texto nos 4 botões
             textoPergunta.textContent = perguntaAtualValida.texto;
             const botoes = gridAlternativas.querySelectorAll(".option-btn");
             botoes.forEach((btn, idx) => {
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Mapeia cliques nas alternativas
+    // Mapeamento dos cliques nos botões de resposta
     gridAlternativas.querySelectorAll(".option-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             let escolha = btn.textContent;
@@ -168,10 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
         jog.point_temporal--;
         jog.index_pergunta++;
 
-        // Regras de Evolução Espiritual
+        // --- SISTEMA DE REGRAS ESPIRITUAIS ---
         if (jog.fase_atual === 1) {
             if (acertou) {
-                jog.point_material = 0; // Desapegou da matéria!
+                jog.point_material = 0; // Libertou-se da matéria!
                 jog.fase_atual = 2; 
             } else {
                 jog.point_material = 1; 
@@ -179,11 +183,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
         else if (jog.fase_atual === 2) {
             if (acertou) {
-                jog.point_moral = 0; // Desapegou do orgulho!
+                jog.point_moral = 0; // Venceu o orgulho!
                 if (jog.point_temporal === 1) jog.fase_atual = 3; 
             } else {
                 jog.point_material = 1; 
-                jog.fase_atual = 1; // Queda moral
+                jog.fase_atual = 1; // Queda espiritual (Volta ao início)
             }
         } 
         else if (jog.fase_atual === 3) {
@@ -192,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        // Se o tempo chegou ao fim sem purificação -> Umbral direto
         if (jog.point_temporal === 0 && !jog.status_final) {
             jog.status_final = "Umbral";
             exibirDesfecho(jog);
@@ -204,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function passarTurno() {
         let ativos = listaJogadores.filter(p => p.point_temporal > 0 && !p.status_final);
         if (ativos.length === 0) {
-            alert("Fim da Partida! Todos os espíritos concluíram o tempo de encarnação.");
+            alert("Partida terminada! Todos os espíritos concluíram o seu ciclo terrestre.");
             window.location.href = "index.html";
             return;
         }
@@ -221,10 +226,10 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "flex";
         if (jogador.status_final === "Colonia") {
             title.innerText = `✨ ${jogador.name} Ascendeu!`;
-            desc.innerText = "Libertaste-te das amarras materiais e do orgulho moral a tempo. Foste recebido numa colónia de transição.";
+            desc.innerText = "Parabéns! Libertaste-te das ilusões terrenas e purificaste o teu orgulho moral a tempo. Foste acolhido numa colónia de luz.";
         } else {
             title.innerText = `🌑 ${jogador.name} foi para o Umbral...`;
-            desc.innerText = "O teu tempo esgotou-se antes de purificares a matéria ou o orgulho. A tua vibração reteve-te nas zonas densas.";
+            desc.innerText = "O teu tempo de encarnação esgotou-se antes que te desapegasses da matéria ou do orgulho. Foste atraído pelas zonas densas.";
         }
 
         btn.onclick = () => {
@@ -233,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // Inicialização Absoluta
+    // Inicialização da Partida
     construirCards();
     renderizarTurno();
 });
