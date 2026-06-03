@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caritas Game - Configurações</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; background-color: #fff; }
+        
+        .container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; }
+        
+        /* Mantém a mesma imagem ao fundo com opacidade reduzida para destacar o menu */
+        .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0.15; z-index: 1; padding: 20px; }
+        
+        /* Layout alinhado verticalmente à esquerda conforme os teus wireframes */
+        .menu-lateral { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 20px; margin-left: 10%; width: 450px; }
+        
+        .row-config { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        
+        .btn-label { width: 260px; padding: 15px; font-size: 1.1rem; font-weight: bold; background: #fff; border: 2px solid #1a1a1a; border-radius: 12px; text-align: center; color: #1a1a1a; }
+        
+        .box-value { width: 70px; height: 50px; border: 2px solid #1a1a1a; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; background: #fff; }
+        
+        input[type="number"].box-value { -moz-appearance: textfield; text-align: center; outline: none; }
+        input[type="number"].box-value::-webkit-outer-spin-button,
+        input[type="number"].box-value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .btn-prosseguir { width: 260px; padding: 15px; font-size: 1.2rem; font-weight: bold; background: #e0e0e0; color: #888; border: 2px solid #b5b5b5; border-radius: 12px; cursor: not-allowed; transition: all 0.3s ease; text-align: center; }
+        
+        /* Classe ativada apenas com inputs válidos */
+        .btn-prosseguir.ready { background: #1a1a1a; color: #fff; border-color: #1a1a1a; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="jesus_and_co.png" alt="Fundo" class="bg-image">
+
+        <div class="menu-lateral">
+            <!-- N Jogadores -->
+            <div class="row-config">
+                <div class="btn-label">Número de jogadores</div>
+                <input type="number" id="players-qty" class="box-value" min="3" max="6" placeholder="...">
+            </div>
+
+            <!-- Tema (Fixo valor 1 conforme wireframe) -->
+            <div class="row-config">
+                <div class="btn-label">Tema do jogo</div>
+                <input type="number" id="game-theme" class="box-value" value="1" readonly>
+            </div>
+
+            <!-- Nível (Fixo em 1 para a V1 da mecânica base) -->
+            <div class="row-config">
+                <div class="btn-label">Nível do Jogo</div>
+                <input type="number" id="game-level" class="box-value" value="1" readonly>
+            </div>
+
+            <!-- Botão Iniciar -->
+            <button id="btn-start" class="btn-prosseguir" disabled>Iniciar</button>
+        </div>
+    </div>
+
+    <script src="menu.js"></script>
+</body>
+</html>
