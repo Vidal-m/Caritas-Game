@@ -4,22 +4,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const skipBtn = document.getElementById("skip-trigger");
     const statusDemo = document.getElementById("status-demo");
     
-    // Captura dos elementos dinâmicos do Player
-    const gameMasterImg = document.querySelector(".gm-avatar");
+    const gmImg = document.querySelector(".gm-avatar");
     const playerImg = statusDemo.querySelector(".P1-avatar");
     const barBlue = statusDemo.querySelector(".bar-blue");
     const barPink = statusDemo.querySelector(".bar-pink");
     const barGreen = statusDemo.querySelector(".bar-green");
 
     let currentSlide = 0;
+    let typeInterval = null; // Guarda o temporizador do efeito máquina de escrever
+    let textFullyDisplayed = false; // Flag para saber se a animação de texto terminou
 
-    // Diálogos estruturados
     const dialogos = [
         "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha vossa ditará o peso da vossa alma...",
         "Vejam acima: Cada espírito possui um tempo de encarnação (azul), orgulho moral (rosa) e pontos materiais (verde).",
         "No melhor cenário, vós purificais a matéria e o orgulho, doando o vosso último suspiro de tempo em prol do próximo para ascender.",
-        "No pior cenário, as ilusões do mundo acumulam-se e o vosso tempo esgota-se antes da purificação... o que vos levará ao Umbral."
+        "No pior cenário, as illusions do mundo acumulam-se e o vosso tempo esgota-se antes da purificação... o que vos levará ao Umbral."
     ];
+
+    // Função que simula a máquina de escrever
+    // Função que simula a máquina de escrever corrigida
+    function typeWriterEffect(text) {
+        // Limpa qualquer efeito que esteja a correr em background
+        clearInterval(typeInterval);
+        textFullyDisplayed = false;
+        textBubble.textContent = ""; // Alterado para textContent por segurança
+        
+        let index = 0;
+        const speed = 30; // 30ms dá uma velocidade de leitura confortável
+
+        typeInterval = setInterval(() => {
+            if (index < text.length) {
+                // Injeta o caractere diretamente respeitando os espaços do array original
+                textBubble.textContent += text[index]; 
+                index++;
+            } else {
+                clearInterval(typeInterval);
+                textFullyDisplayed = true; // O texto terminou de escrever sozinho
+            }
+        }, speed);
+    }
 
     function updateSlide() {
         if (currentSlide >= dialogos.length) {
@@ -27,67 +50,85 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Atualiza o texto da Caridade
-        textBubble.innerText = dialogos[currentSlide];
-
-        // Reset de classes das barras para o estado padrão
-        barBlue.className = "preview-bar bar-blue";
-        barPink.className = "preview-bar bar-pink";
-        barGreen.className = "preview-bar bar-green";
-
-        // CONTROLO DINÂMICO POR SLIDE
-        switch(currentSlide) {
-            case 0:
-                // Slide inicial: O HUD do player fica escondido
-                statusDemo.style.display = "none";
-                gameMasterImg.src = "assets/game-master/game master init.png";
-                break;
-
-            case 1:
-                // Apresentação dos Pontos: Mostra o HUD com valores normais/iniciais
-                statusDemo.style.display = "flex";
-                gameMasterImg.src = "assets/game-master/game master intro.png";
-                playerImg.src = "assets/player1/player1-1material-1moral-3temporal.png";
-                break;
-
-            case 2:
-                // Melhor Cenário: Aplica as classes que reduzem as barras morais/materiais de forma suave
-                statusDemo.style.display = "flex";
-                barBlue.classList.add("best");
-                barPink.classList.add("best");
-                barGreen.classList.add("best");
-                
-                // Dica: Se tiveres uma imagem do player sorridente ou iluminado para o "Best Case", mudas aqui:
-                playerImg.src = "assets/player1/best-player1.png";
-                gameMasterImg.src = "assets/game-master/game master feliz.png";
-                break;
-
-            case 3:
-                // Pior Cenário: Barras negativas sobem, tempo zera
-                statusDemo.style.display = "flex";
-                barBlue.classList.add("worst");
-                barPink.classList.add("worst");
-                barGreen.classList.add("worst");
-                
-                // Dica: Se tiveres uma imagem do player preocupado ou sombrio para o "Worst Case":
-                playerImg.src = "assets/player1/worst-player1.png";
-                gameMasterImg.src = "assets/game-master/game master pensando.png";
-                break;
+        // 1. Fade-out rápido das imagens para a transição suave que configurámos
+        gmImg.classList.add("fade-hidden");
+        if (statusDemo.style.display === "flex") {
+            playerImg.classList.add("fade-hidden");
         }
+
+        setTimeout(() => {
+            // Reset padrão das classes das barras antes de aplicar os novos estados
+            barBlue.className = "preview-bar bar-blue";
+            barPink.className = "preview-bar bar-pink";
+            barGreen.className = "preview-bar bar-green";
+
+            // 2. Controlo de estados visuais por slide
+            switch(currentSlide) {
+                case 0:
+                    statusDemo.style.display = "none";
+                    gmImg.src = "assets/game_master_neutra.png";
+                    break;
+
+                case 1:
+                    statusDemo.style.display = "flex";
+                    playerImg.src = "assets/player1/player1-1material-1moral-3temporal.png";
+                    gmImg.src = "assets/game_master_explicando.png";
+                    break;
+
+                case 2:
+                    statusDemo.style.display = "flex";
+                    barBlue.classList.add("best");
+                    barPink.classList.add("best");
+                    barGreen.classList.add("best");
+                    playerImg.src = "assets/player1/player1-feliz.png"; 
+                    gmImg.src = "assets/game_master_sorrindo.png";
+                    break;
+
+                case 3:
+                    statusDemo.style.display = "flex";
+                    barBlue.classList.add("worst");
+                    barPink.classList.add("worst");
+                    barGreen.classList.add("worst");
+                    playerImg.src = "assets/player1/player1-preocupado.png"; 
+                    gmImg.src = "assets/game_master_seria.png";
+                    break;
+            }
+
+            // Inicia o efeito de máquina de escrever com o texto do slide atual
+            typeWriterEffect(dialogos[currentSlide]);
+
+            // 3. Fade-in das novas imagens expressivas
+            setTimeout(() => {
+                gmImg.classList.remove("fade-hidden");
+                if (statusDemo.style.display === "flex") {
+                    playerImg.classList.remove("fade-hidden");
+                }
+            }, 50);
+
+        }, 200);
     }
 
     function avancarParaJogo() {
+        clearInterval(typeInterval); // Segurança para não deixar timers órfãos
         window.location.href = "jogo.html";
     }
 
-    // Avança ao clicar na caixa de diálogo
+    // 4. Gestor de Cliques Inteligente na Caixa de Diálogo
     dialogBox.addEventListener("click", () => {
-        currentSlide++;
-        updateSlide();
+        if (!textFullyDisplayed) {
+            // Cenário A: O texto ainda está a escrever. Paramos a animação e injetamos o texto completo imediatamente.
+            clearInterval(typeInterval);
+            textBubble.innerText = dialogos[currentSlide];
+            textFullyDisplayed = true;
+        } else {
+            // Cenário B: O texto já estava todo visível. O clique agora passa para o próximo slide.
+            currentSlide++;
+            updateSlide();
+        }
     });
 
     skipBtn.addEventListener("click", avancarParaJogo);
 
-    // Inicializa o primeiro slide do fluxo
+    // Inicializa a primeira fala da Caridade
     updateSlide();
 });
