@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caritas Game - Tabuleiro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; font-family: 'Segoe UI', sans-serif; background: #fafafa; color: #1a1a1a; }
+        
+        .game-layout { display: flex; flex-direction: column; height: 100vh; padding: 30px; justify-content: space-between; }
+        
+        /* Painel Superior com Status do Jogador Ativo */
+        .hud-superior { display: flex; align-items: flex-start; gap: 20px; }
+        .avatar-placeholder { width: 60px; height: 60px; background: #e5e7eb; border-radius: 50%; border: 2px solid #1a1a1a; }
+        .bars-container { display: flex; flex-direction: column; gap: 6px; font-weight: bold; font-size: 0.9rem; }
+        
+        .stat-line { display: flex; align-items: center; gap: 10px; }
+        .bar-bg { width: 150px; height: 12px; background: #e5e7eb; border: 1.5px solid #1a1a1a; border-radius: 6px; overflow: hidden; }
+        .bar-fill { height: 100%; transition: width 0.4s ease; }
+        
+        /* Cores das Barras */
+        .fill-temporal { background: #3b82f6; }
+        .fill-material { background: #10b981; }
+        .fill-moral { background: #ec4899; }
+
+        /* Centro: Caixa de Pergunta e Alternativas Laterais */
+        .quiz-container { display: flex; flex-direction: column; align-items: center; gap: 25px; margin: auto 0; }
+        .question-box { width: 85%; max-width: 800px; background: #fff; border: 3px solid #1a1a1a; border-radius: 16px; padding: 25px; text-align: center; font-size: 1.3rem; font-weight: bold; }
+        
+        .options-grid { display: flex; flex-direction: column; gap: 12px; width: 85%; max-width: 500px; }
+        .option-btn { width: 100%; padding: 14px; font-size: 1rem; font-weight: bold; background: #fff; border: 2px solid #1a1a1a; border-radius: 12px; cursor: pointer; text-align: left; transition: background 0.2s; }
+        .option-btn:hover { background: #f3f4f6; }
+
+        /* Fim de jogo modal simples */
+        .modal-end { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10; align-items: center; justify-content: center; color: #fff; text-align: center; padding: 20px; }
+        .modal-content { background: #1a1a1a; border: 3px solid #fff; padding: 40px; border-radius: 20px; max-width: 500px; }
+        .modal-content button { margin-top: 20px; padding: 10px 25px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="game-layout">
+        <div class="hud-superior">
+            <div class="avatar-placeholder"></div>
+            <div class="bars-container">
+                <div id="player-name" style="font-size: 1.2rem; margin-bottom: 4px;">Jogador 1</div>
+                
+                <div class="stat-line">
+                    <span>⏳ Tempo:</span>
+                    <div class="bar-bg"><div id="bar-temp" class="bar-fill fill-temporal"></div></div>
+                </div>
+                <div class="stat-line">
+                    <span>📦 Matéria:</span>
+                    <div class="bar-bg"><div id="bar-mat" class="bar-fill fill-material"></div></div>
+                </div>
+                <div class="stat-line">
+                    <span>⚖️ Orgulho:</span>
+                    <div class="bar-bg"><div id="bar-mor" class="bar-fill fill-moral"></div></div>
+                </div>
+                <div style="font-size: 0.8rem; color: #666; margin-top: 2px;">Camada Atual: <span id="layer-indicator">1</span></div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <div class="question-box" id="question-text">Buscando pergunta da camada...</div>
+            <div class="options-grid" id="options-box">
+                </div>
+        </div>
+    </div>
+
+    <div class="modal-end" id="end-screen">
+        <div class="modal-content">
+            <h2 id="end-title">Fim da Jornada</h2>
+            <p id="end-desc" style="margin-top: 15px; line-height: 1.5;"></p>
+            <button onclick="window.location.href='index.html'">Voltar ao Início</button>
+        </div>
+    </div>
+
+    <script src="jogo.js"></script>
+</body>
+</html>
