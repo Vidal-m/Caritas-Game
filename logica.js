@@ -1,5 +1,5 @@
-perguntas = {
-    //fase 1: Deus e a Criação
+//fase 1: Deus e a Criação
+fase1 = {
     'O que é Deus?':[
         'É a inteligência suprema, causa primária de todas as coisas.',
         'Um conjunto de deuses que governam diferentes partes do universo.',
@@ -19,8 +19,10 @@ perguntas = {
         'Criaturas com asas que foram criadas perfeitas e nunca encarnam.',
         'Almas criadas apenas no momento do nascimento do corpo físico.',
     ],
+}
 
-    //fase 2: Imortalidade da Alma e Reencarnação
+//fase 2: Imortalidade da Alma e Reencarnação
+fase2 = {
     'O que acontece à alma após a morte do corpo físico?':[
         'Retorna ao mundo espiritual, conservando a sua individualidade e o seu progresso.',
         'É julgada imediatamente e enviada para um inferno de fogo eterno.',
@@ -42,37 +44,51 @@ perguntas = {
         'Sim, mas apenas quando alcançamos a riqueza material na vida presente.',
     ],
 
-    //fase 3: Pluralidade dos Mundos e Obsessão
+
+}
+
+//fase 3: Pluralidade dos Mundos e Obsessão
+fase3 = {
     'A Terra é o único planeta habitado no universo?':[
         'Não, os diferentes mundos do universo servem de habitação para Espíritos em diferentes graus de evolução.',
         'Sim, a Terra é o centro do universo e a única criação com vida inteligente.',
         'Não, mas os outros planetas só têm vida microscópica e sem inteligência.',
         'Sim, porque os Espíritos só conseguem sobreviver na atmosfera da Terra.',
+    ],
         
     'O que é a obsessão espiritual?':[
-        'O domínio que alguns Espíritos inferiores conseguem exercer sobre certas pessoas.',
+        'Correta: O domínio que alguns Espíritos inferiores conseguem exercer sobre certas pessoas.',
         'Uma doença mental causada exclusivamente por fatores genéticos e biológicos.',
+        'Um feitiço feito com objetos materiais que prende um Espírito a alguém.',
         'Um castigo divino enviado para testar a fé dos pecadores.',
-        'feitiço feito com objetos materiais que prende um Espírito a alguémComo podemos prevenir ou curar a obsessão?',
-         'Através da reforma íntima, da prática do bem, da prece e da fluidoterapia (passes)',
-         'Comprando amuletos de proteção e realizando rituais com sacrifício de animais.
-         'Isolando a pessoa afetada do convívio social para sempre numa sala escura.'
-         'Pagando a um médium para que ele destrua o Espírito obsessor.',
     ],
-};
+
+    'Como podemos prevenir ou curar a obsessão?':[
+        'Através da reforma íntima, da prática do bem, da prece e da fluidoterapia (passes).',
+        'Comprando amuletos de proteção e realizando rituais com sacrifício de animais.',
+        'Isolando a pessoa afetada do convívio social para sempre numa sala escura.',
+        'Pagando a um médium para que ele destrua o Espírito obsessor.',
+    ],
+}
+
+game_fases = [fase1, fase2, fase3];
 
 class Game {
     constructor(nbr_players, game_theme, game_level) {
-        this.players = Player(game_level)[nbr_players];
+        this.players = [];
+        for (let i = 0; i < nbr_players; i++)
+            this.players.push(new Player(game_level));
         this.theme = game_theme;
         this.level = game_level;
     }
 
-    phase( ) {
 
-    }
     loop(phase_nbr) {
-
+        for (let i = 0; i < this.game_level; i++) {
+            for (let j = 0; j < this.players.length; j++) {
+                console.log(`Player ${j+1} - Phase ${phase_nbr} - Question: ${game_fases[phase_nbr-1][Object.keys(game_fases[phase_nbr-1])[i]][0]}`);
+            }
+        }
     }
 }
 
@@ -86,4 +102,6 @@ class Player {
     }
 }
 
-console.log('...-')
+game = new Game(2, 'Espiritismo', 3);
+
+game.loop(3);
