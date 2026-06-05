@@ -37,11 +37,11 @@ class Player {
         const allPhotos = [
             "0_f1.png",     // 0: Inicial / Antes de qualquer pergunta
             "1_f1_+m.png",  // 1: Errou a primeira pergunta
-            "2_f2.png",     // 2: Acertou a primeira (Fase 2)
-            "3_f2_+o.png",  // 3: Errou a segunda pergunta
-            "4_f3.png",     // 4: Acertou a segunda (Fase 3 / Final)
-            "5_end_1.png",  // 5: Desfecho COLÓNIA (Acertou a final)
-            "6_end_2.png"   // 6: Desfecho UMBRAL (Errou a final ou sem tempo)
+            "1_f2.png",     // 2: Acertou a primeira (Fase 2) - CORRIGIDO
+            "2_f2_+o.png",  // 3: Errou a segunda pergunta - CORRIGIDO
+            "2_f3.png",     // 4: Acertou a segunda (Fase 3 / Final) - CORRIGIDO
+            "3_end_1.png",  // 5: Desfecho COLÓNIA (Acertou a final) - CORRIGIDO
+            "3_end_2.png"   // 6: Desfecho UMBRAL (Errou a final ou sem tempo) - CORRIGIDO
         ];
         this.foto = `assets/p${this.id}/${allPhotos[index]}`;
     }
