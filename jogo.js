@@ -258,10 +258,16 @@ document.addEventListener("DOMContentLoaded", () => {
     function exibirDesfecho(jogador) {
         const modal = document.getElementById("end-screen");
         const title = document.getElementById("end-title");
+        const imgAvatar = document.getElementById("end-avatar"); // 🌟 Captura a tag da imagem
         const desc = document.getElementById("end-desc");
         const btn = document.getElementById("btn-modal-action");
 
+        // Injeta a foto atual de desfecho do jogador (5_end_1.png ou 6_end_2.png)
+        imgAvatar.src = jogador.foto;
+        imgAvatar.alt = jogador.name;
+
         modal.style.display = "flex";
+        
         if (jogador.status_final === "Colonia") {
             title.innerText = `✨ ${jogador.name} Ascendeu!`;
             desc.innerText = "Parabéns! Libertaste-te das ilusões terrenas e purificaste o teu orgulho moral a tempo. Foste acolhido numa colónia de luz.";
