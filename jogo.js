@@ -28,8 +28,22 @@ class Player {
         this.index_pergunta = 0;
         this.status_final = null; 
 
-        // 🖼️ Foto Dinâmica Retangular baseada no número do jogador (Ex: player1.png, player2.png)
-        this.foto = `assets/player${id}.png`; 
+        // 🔥 Define a foto inicial (Fase 1)
+        this.atualizarFoto(0); 
+    }
+
+    // 🔥 ADICIONA ESTE MÉTODO dentro da classe Player para mudar o caminho da imagem
+    atualizarFoto(index) {
+        const allPhotos = [
+        "0_f1.png",
+        "1_f1_+m.png",
+        "1_f2.png",
+        "2_f2_+o.png",
+        "2_f3.png",
+        "6_end_1.png",
+        "7_end_2.png"
+        ];
+        this.foto = `assets/p${this.id}/${allPhotos[index]}`;
     }
 
     obterPergunta() {
@@ -76,9 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.id = `card-p${p.id}`;
             
             card.innerHTML = `
-                <div class="avatar-placeholder">
-                    <img src="${p.foto}" alt="${p.name}">
-                </div>
+                <img class="player-bg-img" src="${p.foto}" alt="${p.name}">
                 
                 <div class="player-info-block">
                     <div class="player-name">${p.name}</div>
@@ -97,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="bar-label">📦 Matéria</span>
                             <div class="bar-bg"><div class="bar-fill fill-material" id="bar-mat-${p.id}"></div></div>
                         </div>
-                        
                     </div>
                 </div>
             `;
@@ -170,44 +181,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function processarEscolha(acertou) {
-        let jog = listaJogadores[jogadorAtualIndex];
-        
-        jog.point_temporal--;
-        jog.index_pergunta++;
+    let jog = listaJogadores[jogadorAtualIndex];
+    
+    jog.point_temporal--;
+    jog.index_pergunta++;
 
-        // --- SISTEMA DE REGRAS ESPIRITUAIS ---
-        if (jog.fase_atual === 1) {
-            if (acertou) {
-                jog.point_material = 0; // Libertou-se da matéria!
-                jog.fase_atual = 2; 
-            } else {
-                jog.point_material = 1; 
-            }
-        } 
-        else if (jog.fase_atual === 2) {
-            if (acertou) {
-                jog.point_moral = 0; // Venceu o orgulho!
-                if (jog.point_temporal === 1) jog.fase_atual = 3; 
-            } else {
-                jog.point_material = 1; 
-                jog.fase_atual = 1; // Queda espiritual (Volta ao início)
-            }
-        } 
-        else if (jog.fase_atual === 3) {
-            jog.status_final = acertou ? "Colonia" : "Umbral";
-            exibirDesfecho(jog);
-            return;
+    // --- SISTEMA DE REGRAS ESPIRITUAIS E FLUXO DE IMAGENS ---
+    
+    // ================= FASE 1 =================
+    if (jog.fase_atual === 1) {
+        if (acertou) {
+            jog.point_material = 0; // Libertou-se da matéria!
+            jog.fase_atual = 2; 
+            jog.atualizarFoto(2);   // ✨ Acertou a 1ª: Foto 2 (Passa para Fase 2)
+        } else {
+            jog.point_material = 1;
+            jog.atualizarFoto(1);   // 📉 Errou a 1ª: Foto 1 (Continua na Fase 1)
         }
-
-        // Se o tempo chegou ao fim sem purificação -> Umbral direto
-        if (jog.point_temporal === 0 && !jog.status_final) {
+    } 
+    
+    // ================= FASE 2 =================
+    else if (jog.fase_atual === 2) {
+        if (acertou) {
+            jog.point_moral = 0;    // Venceu o orgulho!
+            jog.fase_atual = 3; 
+            jog.atualizarFoto(4);   // ✨ Acertou a 2ª: Foto 4 (Passa para a Final)
+        } else {
+            jog.point_material = 1; 
+            jog.fase_atual = 1;      // 📉 Decadência: Volta para a Fase 1
+            jog.atualizarFoto(3);   // 📉 Errou a 2ª: Foto 3
+        }
+    } 
+    
+    // ================= FASE 3 (PERGUNTA FINAL) =================
+    else if (jog.fase_atual === 3) {
+        if (acertou) {
+            jog.status_final = "Colonia";
+            jog.atualizarFoto(5);   // ✨ Acertou a Final: Foto 5 (Colónia)
+        } else {
             jog.status_final = "Umbral";
-            exibirDesfecho(jog);
-            return;
+            jog.atualizarFoto(6);   // 📉 Errou a Final: Foto 6 (Umbral)
         }
-
-        passarTurno();
+        
+        // 🔥 CRÍTICO: Atualiza o card primeiro para a foto do desfecho aparecer!
+        construirCards(); 
+        exibirDesfecho(jog);
+        return; 
     }
+
+    // ================= VALIDAÇÃO DE TEMPO ESGOTADO =================
+    // Se o tempo chegou a 0 e o jogador não chegou à Fase 3 para responder a final
+    if (jog.point_temporal === 0 && !jog.status_final) {
+        jog.status_final = "Umbral";
+        jog.atualizarFoto(6);       // 🌑 Foto 6 (Umbral) por falta de tempo
+        construirCards(); 
+        exibirDesfecho(jog);
+        return;
+    }
+
+    // 🔥 Renderiza a nova foto e passa o turno
+    construirCards(); 
+    passarTurno();
+}
 
     function passarTurno() {
         let ativos = listaJogadores.filter(p => p.point_temporal > 0 && !p.status_final);

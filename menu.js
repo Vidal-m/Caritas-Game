@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function validarConfiguracoes() {
         const val = parseInt(playersInput.value, 10);
         
-        // Ativa o botão apenas se estiver entre 3 e 6 jogadores conforme os requisitos
-        if (val >= 3 && val <= 6) {
+        // Ativa o botão apenas se estiver entre 2 e 6 jogadores conforme os requisitos
+        if (val >= 2 && val <= 6) {
             btnStart.classList.add("ready");
             btnStart.removeAttribute("disabled");
         } else {
