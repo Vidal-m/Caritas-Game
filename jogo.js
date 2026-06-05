@@ -87,14 +87,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="bar-label">⏳ Tempo</span>
                             <div class="bar-bg"><div class="bar-fill fill-temporal" id="bar-temp-${p.id}"></div></div>
                         </div>
-                        <div class="bar-container">
-                            <span class="bar-label">📦 Matéria</span>
-                            <div class="bar-bg"><div class="bar-fill fill-material" id="bar-mat-${p.id}"></div></div>
-                        </div>
+                        
                         <div class="bar-container">
                             <span class="bar-label">⚖️ Orgulho</span>
                             <div class="bar-bg"><div class="bar-fill fill-moral" id="bar-mor-${p.id}"></div></div>
                         </div>
+
+                        <div class="bar-container">
+                            <span class="bar-label">📦 Matéria</span>
+                            <div class="bar-bg"><div class="bar-fill fill-material" id="bar-mat-${p.id}"></div></div>
+                        </div>
+                        
                     </div>
                 </div>
             `;
