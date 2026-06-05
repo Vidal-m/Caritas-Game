@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const dialogos = [
         "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha vossa ditará o peso da vossa alma...",
-        "Vejam acima: Cada espírito possui um tempo de encarnação (azul), orgulho moral (rosa) e pontos materiais (verde).",
+        "Vejam acima: Cada espírito possui um tempo de encarnação (azul), orgulho moral (marrom) e pontos materiais (verde).",
         "No melhor cenário, vós purificais a matéria e o orgulho, doando o vosso último suspiro de tempo em prol do próximo para ascender.",
         "No pior cenário, as illusions do mundo acumulam-se e o vosso tempo esgota-se antes da purificação... o que vos levará ao Umbral."
     ];
