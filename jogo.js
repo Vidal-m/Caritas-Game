@@ -1,16 +1,101 @@
 // --- BANCO DE DADOS DE QUESTÕES FILOSÓFICAS ---
 const fase1 = {
-    'O que é Deus?': ['É a inteligência suprema, causa primária de todas as coisas.', 'Um conjunto de deuses que governam o universo.', 'Uma força da natureza criada pela mente humana coletiva.', 'Um homem ancião que vive sentado num trono cósmico.'],
-    'Como Deus criou o Universo?': ['Pela Sua vontade, utilizando o fluido cósmico universal.', 'Num processo físico que durou exatamente seis dias de 24 horas.', 'Através de um acidente químico sem qualquer planeamento.', 'Moldando cada planeta com as próprias mãos.']
+    'Segundo a Doutrina Espírita, qual é a verdadeira definição e extensão do conceito de "Trabalho"?': [
+        'Toda ocupação útil que auxilie no progresso material ou intelectual do Espírito.',
+        'Apenas a ação física direcionada à produção de bens e caridade material.',
+        'Qualquer atividade remunerada ou ocupação útil que garanta a subsistência da carne.',
+        'Toda ação intelectual realizada exclusivamente dentro do campo do bem espiritual.'
+    ],
+    'O que Deus espera do trabalhador relativamente ao seu "Campo de Trabalho" na Terra?': [
+        'Ação firme no bem onde quer que a vida o coloque, e esforço contínuo na reforma interior.',
+        'Dedicação exclusiva às tarefas da Casa Espírita ou isolamento das tentações do mundo.',
+        'Iniciativa para ajudar o próximo e aceitação passiva das injustiças sociais do meio.',
+        'Desenvolvimento da inteligência para o progresso material ou resignação diante da dor.'
+    ],
+    'Se o nada não pode produzir o nada, o que a harmonia do Universo nos prova sobre a Causa Primária?': [
+        'A existência de uma Inteligência Suprema, e que o acaso não pode coordenar as leis da criação.',
+        'Que o Universo foi moldado pelas mãos do Criador ou por forças da natureza inteligente.',
+        'A presença de um Deus antropomórfico que governa o mundo e pune o erro humano.',
+        'Que a matéria física evoluiu sozinha a partir do fluido universal ou da inteligência humana.'
+    ],
+    'Diante das imperfeições do mundo, como se caracteriza o verdadeiro Obreiro do Senhor?': [
+        'Aquele que aplica as suas forças no bem e compreende que o progresso exige o esforço próprio.',
+        'O Espírito iluminado que cumpre a sua missão sem enfrentar percalços ou oposição na Terra.',
+        'Aquele que faz grandes doações financeiras e se isola das misérias morais da sociedade.',
+        'Quem possui cargos de liderança na comunidade ou prega a palavra com grande erudição.'
+    ]
 };
 
 const fase2 = {
-    'O que acontece à alma após a morte do corpo?': ['Retorna ao mundo espiritual, conservando a sua individualidade.', 'É julgada imediatamente e enviada para um inferno eterno.', 'Desintegra-se completamente junto com as células do cérebro.', 'Entra num estado de sono eterno até ao fim dos tempos.'],
-    'Qual é o objetivo da reencarnação?': ['Permitir o progresso moral e intelectual do Espírito.', 'Cumprir um ciclo obrigatório de sete vidas na Terra.', 'Permitir que o ser humano encarne em animais ou plantas.', 'Apenas um castigo cósmico sem evolução real.']
+    'Anália Franco colocava Deus no topo dos seus métodos de ensino. Como ela geria a religiosidade nas suas escolas?': [
+        'Permitia auxiliares de outros matizes religiosos, mas não transigia da religiosidade dos educadores.',
+        'Exigia a conversão estrita à fé espírita ou a demissão imediata de qualquer funcionário.',
+        'Separava totalmente a educação técnica da moral cristã para evitar conflitos de crença.',
+        'Admitia apenas educadores laicos e focava exclusivamente na moralização da juventude.'
+    ],
+    'Auta de Souza teve uma existência marcada por perdas e dores físicas. Qual era a sua postura diante disso?': [
+        'Mesmo molestada pela doença implacável, escrevia e ensinava as primeiras noções de religião às crianças.',
+        'Dedicava-se a ler histórias para velhos escravos ou isolava-se para evitar o cansaço do corpo.',
+        'Reclamava da sua triste existência no campo e buscava o isolamento absoluto no sertão.',
+        'Abandonou a escrita poética para se focar estritamente na cura da sua própria enfermidade.'
+    ],
+    'Eurípedes Barsanulfo manifestou cedo uma profunda inteligência. Que encargo recebeu ainda muito jovem?': [
+        'Foi incumbido pelo seu mestre-escola de ensinar aos próprios companheiros de aula.',
+        'Foi nomeado diretor do Grupo Espírita Esperança e Caridade devido à sua liderança natural.',
+        'Recebeu a tarefa de psicografar mensagens de consolo para os necessitados da sua região.',
+        'Foi enviado para estudar em colégios dirigidos por religiosas francesas no sertão.'
+    ],
+    'Em 1927, Chico Xavier ajudou a fundar o Centro Espírita Luiz Gonzaga. Qual o motivo real desta escolha?': [
+        'Uma homenagem ao aviador Charles Lindbergh, que atravessou o Atlântico no Spirit of St. Louis.',
+        'Uma lembrância afetuosa ao seu patrão e tesoureiro da instituição, José Felizardo.',
+        'O nome do espírito mentor que ditou a primeira mensagem psicografada por Chico na cidade.',
+        'Uma homenagem ao santo católico da paróquia onde o seu irmão exercia o presbiterado.'
+    ],
+    'Chico Xavier foi agredido, processado e preso por engano. O que o manteve firme na tarefa?': [
+        'O idealismo vivo de dar o melhor de si sem exigir qualquer retribuição ou privilégio material.',
+        'A promessa espiritual de que os seus inimigos seriam punidos ou convertidos em grandes amigos.',
+        'O apoio financeiro do seu centro espírita e a proteção das autoridades locais da cidade.',
+        'A necessidade de provar a autenticidade das obras psicografadas de autores falecidos.'
+    ],
+    'João Evangelista e o seu irmão Tiago aceitaram o chamado do Cristo na juventude. Qual era o plano deles?': [
+        'Ir à Terra inteira, pregar o Evangelho às nações e renovar o mundo através do porvir.',
+        'Abandonar a pesca no Tiberíades para construir o primeiro centro de assistência social na Galileia.',
+        'Aproveitar a juventude para debater as pregações do Batista ou combater a opressão romana.',
+        'Viajar pelo mundo propagando as belezas do esforço humano e as riquezas do Reino de Deus.'
+    ]
 };
 
 const fase3 = {
-    'A Terra é o único planeta habitado?': ['Não, os mundos servem de habitação para Espíritos em várias evoluções.', 'Sim, a Terra é o centro e única criação com vida inteligente.', 'Não, mas os outros planetas só têm vida microscópica.', 'Sim, a vida fora da terra é uma impossibilidade científica.']
+    'Para um jovem imerso em pensamentos agressivos ou beirando a marginalidade, como a Laborterapia atua?': [
+        'Estimula a concentração e a disciplina através de trabalhos manuais cujas produções são doadas.',
+        'Promove debates filosóficos intensos e isolamento reflexivo para reajuste do períspirito.',
+        'Oferece compensações materiais ou financeiras para desviar o foco dos vícios cotidianos.',
+        'Oculta o infortúnio através de atividades artísticas de grande impacto visual e sonoro.'
+    ],
+    'Quando uma comunidade sofre com a fome, violência e falta de fé, qual o papel regulamentar da CFAS?': [
+        'Arrecadar donativos de porta em porta e beneficiar o próprio caravaneiro no exercício da humildade.',
+        'Realizar o culto do Evangelho no Lar dos assistidos e propiciar o tratamento desobsessivo direto.',
+        'Promover o empréstimo sistemático de livros edificantes para combater a ignorância local.',
+        'Desenvolver atividades de assistência em áreas doadas ou adquiridas estritamente para o lazer.'
+    ],
+    'Casos de lares conturbados, com desemprego, vícios, falta de diálogo ou obsessões ocultas recorrem a qual ação?': [
+        'À Caravana Jesus no Lar, implantando o Evangelho no Lar e identificando infortúnios ocultos.',
+        'Ao Posto de Assistência Espírita, focando exclusivamente na evangelização infantil da comunidade.',
+        'À Campanha Humberto de Campos, através da distribuição em massa de mensagens escritas de alerta.',
+        'Às atividades de Alegria Cristã, para preencher o tempo livre dos familiares com música e arte.'
+    ],
+    'Adolescentes que se revoltam por falta de orientação sobre as mudanças no corpo ou buscam diversão no álcool necessitam de:': [
+        'Evangelização Juvenil, que acolhe e orienta o jovem a entender as transformações físicas e morais.',
+        'Campanhas de Esclarecimento focadas na punição moral e no isolamento de más companhias.',
+        'Aulas teóricas sobre a mediunidade na infância e o perigo imediato da obsessão cármica.',
+        'Atividades manuais de laborterapia forçada para conter a impulsividade e a rebeldia da idade.'
+    ],
+    'Uma jovem grávida em desespero que cogita o aborto clandestino encontra amparo preventivo em qual setor?': [
+        'Na Campanha em Defesa da Vida e na Evangelização, trabalhando a conscientização e o amparo moral.',
+        'Na Caravana Jesus no Lar, realizando exclusivamente o tratamento desobsessivo da gestante.',
+        'No Posto de Assistência Espírita, através do encaminhamento imediato para adoção internacional.',
+        'Na Campanha Humberto de Campos, por meio do empréstimo de livros técnicos sobre a reencarnação.'
+    ]
 };
 
 // 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE
