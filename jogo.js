@@ -10,60 +10,62 @@ const fase2 = {
 };
 
 const fase3 = {
-    'A Terra é o único planeta habitado?': ['Não, os mundos servem de habitação para Espíritos em várias evoluções.', 'Sim, a Terra é o centro e única criação com vida inteligente.', 'Não, mas os outros planetas só têm vida microscópica.', 'Sim, a vida fora da terra é uma impossibilidade espiritual.'],
-    'O que é a obsessão espiritual?': ['O domínio que alguns Espíritos inferiores exercem sobre certas pessoas.', 'Uma doença mental causada exclusivamente por fatores biológicos.', 'Um feitiço feito com objetos materiais que prende o espírito.', 'Um mito antigo sem fundamentos na realidade prática.']
+    'A Terra é o único planeta habitado?': ['Não, os mundos servem de habitação para Espíritos em várias evoluções.', 'Sim, a Terra é o centro e única criação com vida inteligente.', 'Não, mas os outros planetas só têm vida microscópica.', 'Sim, a vida fora da terra é uma impossibilidade científica.']
 };
 
-const game_fases = [fase1, fase2, fase3];
+// 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE
+const introsCaridade = {
+    1: "Saudações, viajantes da matéria. Iniciamos a vossa jornada testando a base de toda a existência... O nada pode criar alguma coisa? Estará o homem por sua conta própria, ou existe uma inteligência suprema governando o infinito cósmico? Vamos falar sobre Deus.",
+    2: "Muito bem... O tempo avança e a vossa carne desgasta-se. Entramos agora na segunda etapa da vossa encarnação. O que define quem tu és quando os batimentos param? O corpo é apenas a casca, mas o progresso pertence à Alma e à sua Evolução contínua.",
+    3: "Chegastes ao limiar do tempo terreno. A grande transição aproxima-se. Olhai para além do vosso próprio umbigo: será a Terra o único grão de areia abençoado com a vida? O Universo abre as portas para a Pluralidade dos Mundos. Esta é a vossa prova final!"
+};
 
-// --- CLASSE DO JOGADOR ESPIRITUAL ---
 class Player {
     constructor(id) {
         this.id = id;
         this.name = `Player ${id}`;
-        this.point_temporal = 3;  
-        this.point_material = 1;  
-        this.point_moral = 1;     
+        this.point_temporal = 3;
+        this.point_material = 1;
+        this.point_moral = 1;
         this.fase_atual = 1;
         this.index_pergunta = 0;
-        this.status_final = null; 
-
-        // 🔥 Define a foto inicial (Fase 1)
-        this.atualizarFoto(0); 
+        this.status_final = null;
+        this.atualizarFoto(0); // Começa com o avatar de index 0 (Inicial)
     }
 
-    // 🔥 ADICIONA ESTE MÉTODO dentro da classe Player para mudar o caminho da imagem
     atualizarFoto(index) {
         const allPhotos = [
-        "0_f1.png",
-        "1_f1_+m.png",
-        "1_f2.png",
-        "2_f2_+o.png",
-        "2_f3.png",
-        "6_end_1.png",
-        "7_end_2.png"
+            "0_f1.png",     // 0: Inicial / Antes de qualquer pergunta
+            "1_f1_+m.png",  // 1: Errou a primeira pergunta
+            "2_f2.png",     // 2: Acertou a primeira (Fase 2)
+            "3_f2_+o.png",  // 3: Errou a segunda pergunta
+            "4_f3.png",     // 4: Acertou a segunda (Fase 3 / Final)
+            "5_end_1.png",  // 5: Desfecho COLÓNIA (Acertou a final)
+            "6_end_2.png"   // 6: Desfecho UMBRAL (Errou a final ou sem tempo)
         ];
         this.foto = `assets/p${this.id}/${allPhotos[index]}`;
     }
 
     obterPergunta() {
-        let banco = game_fases[this.fase_atual - 1];
-        let chaves = Object.keys(banco);
-        
-        if (this.index_pergunta >= chaves.length) this.index_pergunta = 0;
-        
-        let qText = chaves[this.index_pergunta];
-        let alternativas = [...banco[qText]];
-        let correta = alternativas[0];
+        let listaChaves = [];
+        if (this.fase_atual === 1) listaChaves = Object.keys(fase1);
+        else if (this.fase_atual === 2) listaChaves = Object.keys(fase2);
+        else if (this.fase_atual === 3) listaChaves = Object.keys(fase3);
 
-        // Embaralha as alternativas para o desafio do utilizador
-        alternativas.sort(() => Math.random() - 0.5);
+        if (this.index_pergunta >= listaChaves.length) {
+            this.index_pergunta = 0; 
+        }
+        
+        let chave = listaChaves[this.index_pergunta];
+        let opcoes = [];
+        if (this.fase_atual === 1) opcoes = fase1[chave];
+        else if (this.fase_atual === 2) opcoes = fase2[chave];
+        else if (this.fase_atual === 3) opcoes = fase3[chave];
 
-        return { texto: qText, opcoes: alternativas, certa: correta };
+        return { pergunta: chave, opcoes: opcoes, certa: opcoes[0] };
     }
 }
 
-// --- MOTOR DE CONTROLO DO TABULEIRO ---
 document.addEventListener("DOMContentLoaded", () => {
     const totalJogadores = parseInt(localStorage.getItem("caritas_total_jogadores") || "3", 10);
     const painelJogadores = document.getElementById("painel-jogadores");
@@ -73,6 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const contadorFase = document.getElementById("fase-contador");
     const gridAlternativas = document.getElementById("grid-alternativas");
 
+    // Elementos da Introdução da Caridade
+    const overlayIntro = document.getElementById("overlay-intro-caridade");
+    const textoIntro = document.getElementById("texto-intro-caridade");
+    const caixaIntroBox = document.getElementById("caixa-intro-caridade");
+
     let listaJogadores = [];
     for (let i = 1; i <= totalJogadores; i++) {
         listaJogadores.push(new Player(i));
@@ -80,8 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let jogadorAtualIndex = 0;
     let perguntaAtualValida = null;
+    let faseGlobalAtual = 1; // Controla em que rodada macro o tabuleiro se encontra
+    let typewriterInterval = null;
 
-    // Injeção de HTML respeitando a nova estrutura de imagem total (sangrada)
     function construirCards() {
         painelJogadores.innerHTML = "";
         listaJogadores.forEach(p => {
@@ -89,6 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
             card.className = "player-card";
             card.id = `card-p${p.id}`;
             
+            if (p.status_final) {
+                card.classList.add("dead");
+            }
+
             card.innerHTML = `
                 <img class="player-bg-img" src="${p.foto}" alt="${p.name}">
                 
@@ -97,17 +109,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="player-bars">
                         <div class="bar-container">
                             <span class="bar-label">⏳ Tempo</span>
-                            <div class="bar-bg"><div class="bar-fill fill-temporal" id="bar-temp-${p.id}"></div></div>
+                            <div class="bar-bg"><div class="bar-fill fill-temporal" style="width: ${(p.point_temporal/3)*100}%"></div></div>
                         </div>
-                        
                         <div class="bar-container">
                             <span class="bar-label">⚖️ Orgulho</span>
-                            <div class="bar-bg"><div class="bar-fill fill-moral" id="bar-mor-${p.id}"></div></div>
+                            <div class="bar-bg"><div class="bar-fill fill-moral" style="width: ${p.point_moral * 100}%"></div></div>
                         </div>
-
                         <div class="bar-container">
                             <span class="bar-label">📦 Matéria</span>
-                            <div class="bar-bg"><div class="bar-fill fill-material" id="bar-mat-${p.id}"></div></div>
+                            <div class="bar-bg"><div class="bar-fill fill-material" style="width: ${p.point_material * 100}%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -116,62 +126,104 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // 🌟 FUNÇÃO QUE PROMOVE O EFEITO TYPEWRITER DA CARIDADE
+    function rodarTypewriter(texto) {
+        clearInterval(typewriterInterval);
+        textoIntro.textContent = "";
+        let i = 0;
+        
+        typewriterInterval = setInterval(() => {
+            if (i < texto.length) {
+                textoIntro.textContent += texto.charAt(i);
+                i++;
+            } else {
+                clearInterval(typewriterInterval);
+            }
+        }, 30); // Velocidade da digitação (30ms por letra)
+    }
+
+    // 🌟 FUNÇÃO PARA DISPARAR A INTRODUÇÃO DA GUIA
+    function verificarEMostrarIntroCaridade(faseAlvo, callback) {
+        overlayIntro.classList.remove("hidden");
+        rodarTypewriter(introsCaridade[faseAlvo]);
+
+        caixaIntroBox.onclick = () => {
+            clearInterval(typewriterInterval); // Para a animação se o usuário clicar antes de terminar
+            overlayIntro.classList.add("hidden");
+            if (callback) callback();
+        };
+    }
+
     function renderizarTurno() {
         let jog = listaJogadores[jogadorAtualIndex];
 
-        // Validação: se o espírito atual ficou sem tempo, pula o seu turno
-        if (jog.point_temporal <= 0 || jog.status_final) {
+        // Se o jogador da vez já terminou o jogo, passa automaticamente
+        if (jog.status_final || jog.point_temporal <= 0) {
             passarTurno();
             return;
         }
 
-        // Restaura e limpa a tela para a fase de Destaque inicial
-        painelOpcoes.classList.add("hidden");
-        caixaPergunta.classList.remove("no-topo");
-        painelJogadores.classList.remove("hidden");
+        // --- CONTROLO SE A RODADA DO TABULEIRO AVANÇOU ECONOMICAMENTE ---
+        // Se o player ativo está numa fase acima da fase controlada pelo tabuleiro, atualizamos a fase global
+        if (jog.fase_atual > faseGlobalAtual) {
+            faseGlobalAtual = jog.fase_atual;
+            contadorFase.textContent = `Fase ${faseGlobalAtual}`;
+            
+            // Trava o turno, mostra a Caridade e só depois renderiza a pergunta
+            verificarEMostrarIntroCaridade(faseGlobalAtual, () => {
+                continuarRenderizacaoTurno(jog);
+            });
+            return;
+        }
 
-        contadorFase.textContent = `Fase ${jog.fase_atual}`;
-        
-        // Atualiza a barra gráfica e as classes CSS de ampliação (.active)
-        listaJogadores.forEach((p, idx) => {
-            const card = document.getElementById(`card-p${p.id}`);
-            if (!card) return;
-
-            card.className = "player-card";
-
-            // Transforma os pontos inteiros (0 a 3) em percentagem gráfica real para o CSS
-            document.getElementById(`bar-temp-${p.id}`).style.width = `${(p.point_temporal / 3) * 100}%`;
-            document.getElementById(`bar-mat-${p.id}`).style.width = `${p.point_material * 100}%`;
-            document.getElementById(`bar-mor-${p.id}`).style.width = `${p.point_moral * 100}%`;
-
-            if (p.point_temporal <= 0 || p.status_final) {
-                card.classList.add("dead");
-            } else if (idx === jogadorAtualIndex) {
-                card.classList.add("active"); // Destaca e dá zoom ao player da vez
-            }
-        });
-
-        perguntaAtualValida = jog.obterPergunta();
-        textoPergunta.textContent = `Pergunta para o ${jog.name}`;
+        continuarRenderizacaoTurno(jog);
     }
 
-    // Evento de Clique no Balão Inferior: Transita para a grelha de alternativas 2x2
+    function continuarRenderizacaoTurno(jog) {
+        construirCards();
+
+        // Remove destaques anteriores e aplica ao card do jogador atual
+        document.querySelectorAll(".player-card").forEach(c => c.classList.remove("active"));
+        const cardAtivo = document.getElementById(`card-p${jog.id}`);
+        if (cardAtivo) cardAtivo.classList.add("active");
+
+        // Prepara as perguntas na interface
+        let dadosPerg = jog.obterPergunta();
+        perguntaAtualValida = dadosPerg;
+
+        textoPergunta.textContent = `${jog.name}: ${dadosPerg.pergunta}`;
+        
+        // Garante que a caixa de texto volta para baixo e oculta as alternativas da jogada anterior
+        caixaPergunta.classList.remove("no-topo");
+        painelOpcoes.classList.add("hidden");
+        painelJogadores.classList.remove("hidden");
+    }
+
+    // Transição da Pergunta para a Grelha de Respostas
     caixaPergunta.addEventListener("click", () => {
         if (painelOpcoes.classList.contains("hidden")) {
             painelJogadores.classList.add("hidden");
             caixaPergunta.classList.add("no-topo");
             
-            textoPergunta.textContent = perguntaAtualValida.texto;
             const botoes = gridAlternativas.querySelectorAll(".option-btn");
             botoes.forEach((btn, idx) => {
-                btn.textContent = perguntaAtualValida.opcoes[idx];
+                // Sorteia ou distribui as opções
+                let textoOpcao = perguntaAtualValida.opcoes[idx];
+                btn.textContent = textoOpcao ? textoOpcao : "";
+                
+                // Se o botão estiver vazio (menos de 4 opções), esconde-o
+                if (btn.textContent === "") {
+                    btn.style.display = "none";
+                } else {
+                    btn.style.display = "block";
+                }
             });
 
             painelOpcoes.classList.remove("hidden");
         }
     });
 
-    // Mapeamento dos cliques nos botões de resposta
+    // Mapeia cliques nas opções da grelha
     gridAlternativas.querySelectorAll(".option-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             let escolha = btn.textContent;
@@ -181,73 +233,63 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function processarEscolha(acertou) {
-    let jog = listaJogadores[jogadorAtualIndex];
-    
-    jog.point_temporal--;
-    jog.index_pergunta++;
-
-    // --- SISTEMA DE REGRAS ESPIRITUAIS E FLUXO DE IMAGENS ---
-    
-    // ================= FASE 1 =================
-    if (jog.fase_atual === 1) {
-        if (acertou) {
-            jog.point_material = 0; // Libertou-se da matéria!
-            jog.fase_atual = 2; 
-            jog.atualizarFoto(2);   // ✨ Acertou a 1ª: Foto 2 (Passa para Fase 2)
-        } else {
-            jog.point_material = 1;
-            jog.atualizarFoto(1);   // 📉 Errou a 1ª: Foto 1 (Continua na Fase 1)
-        }
-    } 
-    
-    // ================= FASE 2 =================
-    else if (jog.fase_atual === 2) {
-        if (acertou) {
-            jog.point_moral = 0;    // Venceu o orgulho!
-            jog.fase_atual = 3; 
-            jog.atualizarFoto(4);   // ✨ Acertou a 2ª: Foto 4 (Passa para a Final)
-        } else {
-            jog.point_material = 1; 
-            jog.fase_atual = 1;      // 📉 Decadência: Volta para a Fase 1
-            jog.atualizarFoto(3);   // 📉 Errou a 2ª: Foto 3
-        }
-    } 
-    
-    // ================= FASE 3 (PERGUNTA FINAL) =================
-    else if (jog.fase_atual === 3) {
-        if (acertou) {
-            jog.status_final = "Colonia";
-            jog.atualizarFoto(5);   // ✨ Acertou a Final: Foto 5 (Colónia)
-        } else {
-            jog.status_final = "Umbral";
-            jog.atualizarFoto(6);   // 📉 Errou a Final: Foto 6 (Umbral)
-        }
+        let jog = listaJogadores[jogadorAtualIndex];
         
-        // 🔥 CRÍTICO: Atualiza o card primeiro para a foto do desfecho aparecer!
-        construirCards(); 
-        exibirDesfecho(jog);
-        return; 
-    }
+        jog.point_temporal--;
+        jog.index_pergunta++;
 
-    // ================= VALIDAÇÃO DE TEMPO ESGOTADO =================
-    // Se o tempo chegou a 0 e o jogador não chegou à Fase 3 para responder a final
-    if (jog.point_temporal === 0 && !jog.status_final) {
-        jog.status_final = "Umbral";
-        jog.atualizarFoto(6);       // 🌑 Foto 6 (Umbral) por falta de tempo
-        construirCards(); 
-        exibirDesfecho(jog);
-        return;
-    }
+        // --- SISTEMA DE REGRAS ESPIRITUAIS E FLUXO DE IMAGENS ---
+        if (jog.fase_atual === 1) {
+            if (acertou) {
+                jog.point_material = 0; 
+                jog.fase_atual = 2; 
+                jog.atualizarFoto(2);   
+            } else {
+                jog.point_material = 1;
+                jog.atualizarFoto(1);   
+            }
+        } 
+        else if (jog.fase_atual === 2) {
+            if (acertou) {
+                jog.point_moral = 0;    
+                jog.fase_atual = 3; 
+                jog.atualizarFoto(4);   
+            } else {
+                jog.point_material = 1; 
+                jog.fase_atual = 1;      
+                jog.atualizarFoto(3);   
+            }
+        } 
+        else if (jog.fase_atual === 3) {
+            if (acertou) {
+                jog.status_final = "Colonia";
+                jog.atualizarFoto(5);   
+            } else {
+                jog.status_final = "Umbral";
+                jog.atualizarFoto(6);   
+            }
+            
+            construirCards(); 
+            exibirDesfecho(jog);
+            return; 
+        }
 
-    // 🔥 Renderiza a nova foto e passa o turno
-    construirCards(); 
-    passarTurno();
-}
+        if (jog.point_temporal === 0 && !jog.status_final) {
+            jog.status_final = "Umbral";
+            jog.atualizarFoto(6);       
+            construirCards(); 
+            exibirDesfecho(jog);
+            return;
+        }
+
+        construirCards(); 
+        passarTurno();
+    }
 
     function passarTurno() {
         let ativos = listaJogadores.filter(p => p.point_temporal > 0 && !p.status_final);
         if (ativos.length === 0) {
-            alert("Partida terminada! Todos os espíritos concluíram o seu ciclo terrestre.");
+            alert("Partida terminada! Todos os espíritos concluíram a sua transição.");
             window.location.href = "index.html";
             return;
         }
@@ -258,11 +300,10 @@ document.addEventListener("DOMContentLoaded", () => {
     function exibirDesfecho(jogador) {
         const modal = document.getElementById("end-screen");
         const title = document.getElementById("end-title");
-        const imgAvatar = document.getElementById("end-avatar"); // 🌟 Captura a tag da imagem
+        const imgAvatar = document.getElementById("end-avatar"); 
         const desc = document.getElementById("end-desc");
         const btn = document.getElementById("btn-modal-action");
 
-        // Injeta a foto atual de desfecho do jogador (5_end_1.png ou 6_end_2.png)
         imgAvatar.src = jogador.foto;
         imgAvatar.alt = jogador.name;
 
@@ -282,7 +323,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // Inicialização da Partida
-    construirCards();
-    renderizarTurno();
+    // 🔥 INICIALIZAÇÃO DO JOGO: O jogo agora começa disparando a Intro da Fase 1 automaticamente!
+    contadorFase.textContent = `Fase ${faseGlobalAtual}`;
+    verificarEMostrarIntroCaridade(faseGlobalAtual, () => {
+        renderizarTurno();
+    });
 });
