@@ -17,9 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const dialogos = [
         "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha ditará o peso da vossa alma no momento da grande transição...",
         "Cada espírito carrega três fardos: o Tempo de encarnação (azul), o Apego à Matéria (verde) e o Orgulho Moral (laranja). Todos começam cheios.",
-        "Ao responderdes com sabedoria, os vossos vícios transformam-se em virtudes. As barras não desaparecem — tornam-se douradas. O Apego vira Desapego. O Orgulho vira Humildade.",
-        "Mas ao errardes, os vossos vícios intensificam-se. As barras escurecem. E o tempo... o tempo nunca para. Cada pergunta custa um sopro de vida, certa ou errada.",
-        "Só ascende à Colónia de Luz quem purificar ambos os vícios a tempo. Um único erro no caminho leva ao Umbral. Não há segunda encarnação nesta partida. Escolhei com sabedoria."
+        "Ao responderdes com sabedoria, os vossos vícios transformam-se em virtudes — as barras não desaparecem, tornam-se douradas. O Apego vira Desapego. O Orgulho vira Humildade. E o Tempo bem vivido? Também se ilumina.",
+        "Mas ao errardes, os vícios intensificam-se e as barras escurecem. Um tempo mal vivido não desaparece — apodrece. E o tempo nunca para. Cada pergunta custa um sopro de vida, certa ou errada.",
+        "Só ascende à Colónia de Luz quem purificar ambos os vícios a tempo. Um único erro no caminho pode levar ao Umbral. Não há segunda encarnação nesta partida. Escolhei com sabedoria."
     ];
 
     // Função que simula a máquina de escrever
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 case 2: // Purificação — barras viram douradas
                     statusDemo.style.display = "flex";
-                    barBlue.className = "preview-bar bar-blue";
+                    barBlue.className = "preview-bar bar-virtude";
                     barPink.className = "preview-bar bar-virtude";
                     barGreen.className = "preview-bar bar-virtude";
                     playerImg.src = "assets/player1/best-player1.png";
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 case 3: // Agravamento — barras escurecem
                     statusDemo.style.display = "flex";
-                    barBlue.className = "preview-bar bar-blue";
+                    barBlue.className = "preview-bar bar-tempo-mau";
                     barPink.className = "preview-bar bar-moral-agravado";
                     barGreen.className = "preview-bar bar-material-agravado";
                     playerImg.src = "assets/player1/worst-player1.png";
