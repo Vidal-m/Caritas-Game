@@ -133,22 +133,12 @@ class Player {
         this.foto = `assets/p${this.id}/${allPhotos[index]}`;
     }
 
-    obterPergunta() {
-        let listaChaves = [];
-        if (this.fase_atual === 1) listaChaves = Object.keys(fase1);
-        else if (this.fase_atual === 2) listaChaves = Object.keys(fase2);
-        else if (this.fase_atual === 3) listaChaves = Object.keys(fase3);
-
-        if (this.index_pergunta >= listaChaves.length) {
-            this.index_pergunta = 0; 
-        }
-        
-        let chave = listaChaves[this.index_pergunta];
-        let opcoes = [];
-        if (this.fase_atual === 1) opcoes = fase1[chave];
-        else if (this.fase_atual === 2) opcoes = fase2[chave];
-        else if (this.fase_atual === 3) opcoes = fase3[chave];
-
+    obterPergunta(rodada) {
+        const bancos = [fase1, fase2, fase3];
+        const banco = bancos[rodada - 1];
+        const chaves = Object.keys(banco);
+        const chave = chaves[this.id - 1];
+        const opcoes = banco[chave];
         return { pergunta: chave, opcoes: opcoes, certa: opcoes[0] };
     }
 }
@@ -295,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cardAtivo) cardAtivo.classList.add("active");
 
         // Prepara as perguntas na interface
-        let dadosPerg = jog.obterPergunta();
+        let dadosPerg = jog.obterPergunta(rodadaAtual);;
         perguntaAtualValida = dadosPerg;
 
         textoPergunta.textContent = `${jog.name}: ${dadosPerg.pergunta}`;
