@@ -105,7 +105,7 @@ const introsCaridade = {
     3: "Chegastes ao limiar do tempo terreno. A grande transição aproxima-se. Olhai para além do vosso próprio umbigo: será a Terra o único grão de areia abençoado com a vida? O Universo abre as portas para a Pluralidade dos Mundos. Esta é a vossa prova final!"
 };
 
-let rodadaAtual = 0;
+let rodadaAtual = 1; // Começa na fase 1 (fases são 1, 2 e 3)
 
 class Player {
     constructor(id) {
@@ -250,13 +250,14 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // --- CONTROLO SE A RODADA DO TABULEIRO AVANÇOU ECONOMICAMENTE ---
-        // Se o player ativo está numa fase acima da fase controlada pelo tabuleiro, atualizamos a fase global
+        // --- CONTROLO SE A RODADA GLOBAL AVANÇOU ---
+        // A rodada sobe quando TODOS os jogadores responderam ao mesmo número de perguntas.
+        // Usa index_pergunta (quantas já respondeu), não a fase interna de cada um.
         let novaRodada = obterRodadaGlobal();
 
         if (novaRodada > rodadaAtual) {
             rodadaAtual = novaRodada;
-            contadorFase.textContent = `Rodada ${rodadaAtual + 1}`;
+            contadorFase.textContent = `Rodada ${rodadaAtual}`;
 
             verificarEMostrarIntroCaridade(
                 rodadaAtual,
@@ -269,17 +270,20 @@ document.addEventListener("DOMContentLoaded", () => {
         continuarRenderizacaoTurno(jog);
     }
 
+    // Retorna a rodada global: o mínimo de perguntas respondidas entre todos os jogadores ativos.
+    // "Todos responderam N perguntas" → rodada N+1 começa.
+    // Limitado a 3 porque o jogo tem 3 rodadas.
     function obterRodadaGlobal() {
         let ativos = listaJogadores.filter(
-            p => p.point_temporal > 0
+            p => p.point_temporal > 0 && !p.status_final
         );
 
         if (ativos.length === 0)
-            return 3;
+            return rodadaAtual; // Ninguém ativo, não avança
 
-        return Math.min(
-            ...ativos.map(p => p.index_pergunta)
-        );
+        // +1 porque index_pergunta é quantas já respondeu; a próxima rodada é essa + 1
+        let minimoRespondido = Math.min(...ativos.map(p => p.index_pergunta));
+        return Math.min(minimoRespondido + 1, 3);
     }
 
     function continuarRenderizacaoTurno(jog) {
@@ -390,13 +394,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function passarTurno() {
-        let ativos = listaJogadores.filter(p => p.point_temporal > 0 && !p.status_final);
+        let ativos = listaJogadores.filter(p => !p.status_final && p.point_temporal > 0);
         if (ativos.length === 0) {
             alert("Partida terminada! Todos os espíritos concluíram a sua transição.");
             window.location.href = "index.html";
             return;
         }
-        jogadorAtualIndex = (jogadorAtualIndex + 1) % listaJogadores.length;
+        // Avança para o próximo índice, saltando jogadores já terminados
+        do {
+            jogadorAtualIndex = (jogadorAtualIndex + 1) % listaJogadores.length;
+        } while (listaJogadores[jogadorAtualIndex].status_final || listaJogadores[jogadorAtualIndex].point_temporal <= 0);
+        
         renderizarTurno();
     }
 
@@ -426,9 +434,9 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // 🔥 INICIALIZAÇÃO DO JOGO: O jogo agora começa disparando a Intro da Fase 1 automaticamente!
-    contadorFase.textContent = `Rodada ${rodadaAtual + 1}`;
-    verificarEMostrarIntroCaridade(rodadaAtual + 1, () => {
+    // 🔥 INICIALIZAÇÃO DO JOGO: Dispara a Intro da Rodada 1 automaticamente
+    contadorFase.textContent = `Rodada ${rodadaAtual}`;
+    verificarEMostrarIntroCaridade(rodadaAtual, () => {
         renderizarTurno();
     });
 });
