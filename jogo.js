@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="player-bars">
                         <div class="bar-container">
                             <span class="bar-label">⏳ Tempo</span>
-                            <div class="bar-bg"><div class="bar-fill fill-temporal" style="width: ${(p.point_temporal/3)*100}%"></div></div>
+                            <div class="bar-bg"><div class="bar-fill ${p.point_temporal === 0 ? 'fill-temporal-vazio' : 'fill-temporal'}" style="width: ${p.point_temporal === 0 ? 100 : (p.point_temporal/3)*100}%"></div></div>
                         </div>
                         <div class="bar-container">
                             <span class="bar-label">${p.estado_moral === 'purificado' ? '✨ Humildade' : '⚖️ Orgulho'}</span>
