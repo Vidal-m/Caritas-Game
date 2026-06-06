@@ -112,23 +112,24 @@ class Player {
         this.id = id;
         this.name = `Player ${id}`;
         this.point_temporal = 3;
-        this.point_material = 1;
-        this.point_moral = 1;
         this.fase_atual = 1;
         this.index_pergunta = 0;
         this.status_final = null;
-        this.atualizarFoto(0); // Começa com o avatar de index 0 (Inicial)
+        // Estado das barras: 'vicio' | 'purificado' | 'agravado'
+        this.estado_material = 'vicio';
+        this.estado_moral = 'vicio';
+        this.atualizarFoto(0);
     }
 
     atualizarFoto(index) {
         const allPhotos = [
-            "0_f1.png",     // 0: Inicial / Antes de qualquer pergunta
+            "0_f1.png",     // 0: Inicial
             "1_f1_+m.png",  // 1: Errou a primeira pergunta
-            "1_f2.png",     // 2: Acertou a primeira (Fase 2) - CORRIGIDO
-            "2_f2_+o.png",  // 3: Errou a segunda pergunta - CORRIGIDO
-            "2_f3.png",     // 4: Acertou a segunda (Fase 3 / Final) - CORRIGIDO
-            "3_end_1.png",  // 5: Desfecho COLÓNIA (Acertou a final) - CORRIGIDO
-            "3_end_2.png"   // 6: Desfecho UMBRAL (Errou a final ou sem tempo) - CORRIGIDO
+            "1_f2.png",     // 2: Acertou a primeira
+            "2_f2_+o.png",  // 3: Errou a segunda pergunta
+            "2_f3.png",     // 4: Acertou a segunda
+            "3_end_1.png",  // 5: Desfecho COLÓNIA
+            "3_end_2.png"   // 6: Desfecho UMBRAL
         ];
         this.foto = `assets/p${this.id}/${allPhotos[index]}`;
     }
@@ -167,6 +168,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let faseGlobalAtual = 1; // Controla em que rodada macro o tabuleiro se encontra
     let typewriterInterval = null;
 
+    function classeBarraMoral(estado) {
+        if (estado === 'purificado') return 'fill-virtude';
+        if (estado === 'agravado')   return 'fill-moral-agravado';
+        return 'fill-moral'; // vicio base
+    }
+
+    function classeBarraMaterial(estado) {
+        if (estado === 'purificado') return 'fill-virtude';
+        if (estado === 'agravado')   return 'fill-material-agravado';
+        return 'fill-material'; // vicio base
+    }
+
     function construirCards() {
         painelJogadores.innerHTML = "";
         listaJogadores.forEach(p => {
@@ -189,12 +202,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             <div class="bar-bg"><div class="bar-fill fill-temporal" style="width: ${(p.point_temporal/3)*100}%"></div></div>
                         </div>
                         <div class="bar-container">
-                            <span class="bar-label">⚖️ Orgulho</span>
-                            <div class="bar-bg"><div class="bar-fill fill-moral" style="width: ${p.point_moral * 100}%"></div></div>
+                            <span class="bar-label">${p.estado_moral === 'purificado' ? '✨ Humildade' : '⚖️ Orgulho'}</span>
+                            <div class="bar-bg"><div class="bar-fill ${classeBarraMoral(p.estado_moral)}" style="width: 100%"></div></div>
                         </div>
                         <div class="bar-container">
-                            <span class="bar-label">📦 Matéria</span>
-                            <div class="bar-bg"><div class="bar-fill fill-material" style="width: ${p.point_material * 100}%"></div></div>
+                            <span class="bar-label">${p.estado_material === 'purificado' ? '🌿 Desapego' : '📦 Matéria'}</span>
+                            <div class="bar-bg"><div class="bar-fill ${classeBarraMaterial(p.estado_material)}" style="width: 100%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -285,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cardAtivo) cardAtivo.classList.add("active");
 
         // Prepara as perguntas na interface
-        let dadosPerg = jog.obterPergunta(rodadaAtual);;
+        let dadosPerg = jog.obterPergunta(rodadaAtual);
         perguntaAtualValida = dadosPerg;
 
         textoPergunta.textContent = `${jog.name}: ${dadosPerg.pergunta}`;
@@ -335,51 +348,57 @@ document.addEventListener("DOMContentLoaded", () => {
         jog.point_temporal--;
         jog.index_pergunta++;
 
-        // --- SISTEMA DE REGRAS ESPIRITUAIS E FLUXO DE IMAGENS ---
+        // --- SISTEMA DE REGRAS ESPIRITUAIS ---
         if (jog.fase_atual === 1) {
             if (acertou) {
-                jog.point_material = 0; 
-                jog.fase_atual = 2; 
-                jog.atualizarFoto(2);   
+                jog.estado_material = 'purificado'; // Matéria vira dourada
+                jog.fase_atual = 2;
+                jog.atualizarFoto(2);
             } else {
-                jog.point_material = 1;
-                jog.atualizarFoto(1);   
+                // Apego material agrava-se (só se ainda não purificado)
+                if (jog.estado_material !== 'purificado') {
+                    jog.estado_material = 'agravado';
+                }
+                jog.atualizarFoto(1);
             }
-        } 
+        }
         else if (jog.fase_atual === 2) {
             if (acertou) {
-                jog.point_moral = 0;    
-                jog.fase_atual = 3; 
-                jog.atualizarFoto(4);   
+                jog.estado_moral = 'purificado'; // Orgulho vira dourado
+                jog.fase_atual = 3;
+                jog.atualizarFoto(4);
             } else {
-                jog.point_material = 1; 
-                jog.fase_atual = 1;      
-                jog.atualizarFoto(3);   
+                // Orgulho agrava-se mesmo que matéria já esteja purificada
+                jog.estado_moral = 'agravado';
+                jog.fase_atual = 1; // Recua
+                jog.atualizarFoto(3);
             }
-        } 
+        }
         else if (jog.fase_atual === 3) {
             if (acertou) {
+                // Só ascende quem acertou todas — chegou aqui com ambas purificadas
                 jog.status_final = "Colonia";
-                jog.atualizarFoto(5);   
+                jog.atualizarFoto(5);
             } else {
+                // Errou a final: sem tempo para resgatar as faltas
+                jog.estado_moral = 'agravado';
                 jog.status_final = "Umbral";
-                jog.atualizarFoto(6);   
+                jog.atualizarFoto(6);
             }
-            
-            construirCards(); 
-            exibirDesfecho(jog);
-            return; 
-        }
-
-        if (jog.point_temporal === 0 && !jog.status_final) {
-            jog.status_final = "Umbral";
-            jog.atualizarFoto(6);       
-            construirCards(); 
+            construirCards();
             exibirDesfecho(jog);
             return;
         }
 
-        construirCards(); 
+        if (jog.point_temporal === 0 && !jog.status_final) {
+            jog.status_final = "Umbral";
+            jog.atualizarFoto(6);
+            construirCards();
+            exibirDesfecho(jog);
+            return;
+        }
+
+        construirCards();
         passarTurno();
     }
 
