@@ -25,6 +25,10 @@
         .bar-blue { width: 120px; background: #B0C1D9; }
         .bar-pink { width: 120px; background: #F2A488; }
         .bar-green { width: 120px; background: #A09F87; }
+        /* Estados de transformação */
+        .bar-virtude { width: 120px; background: #F5C842; }
+        .bar-moral-agravado { width: 120px; background: #C0392B; }
+        .bar-material-agravado { width: 120px; background: #8B4513; }
 
         .bar-blue.best { width: 10px; background: #B0C1D9; }
         .bar-pink.best { width: 10px; background: #F2A488; }
@@ -64,6 +68,14 @@
             white-space: pre-wrap;   /* Preserva espaços e quebra linhas de forma natural */
             word-wrap: break-word;   /* Garante que palavras longas quebrem se necessário */
             display: inline-block;
+        }
+
+        /* Utilitário de transição para fade das imagens */
+        .gm-avatar, .P1-avatar {
+            transition: opacity 0.2s ease-out;
+        }
+        .fade-hidden {
+            opacity: 0 !important;
         }
     </style>
 </head>

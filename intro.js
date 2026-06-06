@@ -15,10 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let textFullyDisplayed = false; // Flag para saber se a animação de texto terminou
 
     const dialogos = [
-        "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha vossa ditará o peso da vossa alma...",
-        "Vejam acima: Cada espírito possui um tempo de encarnação (azul), orgulho moral (marrom) e pontos materiais (verde).",
-        "No melhor cenário, vós purificais a matéria e o orgulho, doando o vosso último suspiro de tempo em prol do próximo para ascender.",
-        "No pior cenário, as illusions do mundo acumulam-se e o vosso tempo esgota-se antes da purificação... o que vos levará ao Umbral."
+        "Sou a Caridade. Serei a vossa guia nesta jornada de desapego e evolução. Cada escolha ditará o peso da vossa alma no momento da grande transição...",
+        "Cada espírito carrega três fardos: o Tempo de encarnação (azul), o Apego à Matéria (verde) e o Orgulho Moral (laranja). Todos começam cheios.",
+        "Ao responderdes com sabedoria, os vossos vícios transformam-se em virtudes. As barras não desaparecem — tornam-se douradas. O Apego vira Desapego. O Orgulho vira Humildade.",
+        "Mas ao errardes, os vossos vícios intensificam-se. As barras escurecem. E o tempo... o tempo nunca para. Cada pergunta custa um sopro de vida, certa ou errada.",
+        "Só ascende à Colónia de Luz quem purificar ambos os vícios a tempo. Um único erro no caminho leva ao Umbral. Não há segunda encarnação nesta partida. Escolhei com sabedoria."
     ];
 
     // Função que simula a máquina de escrever
@@ -64,33 +65,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // 2. Controlo de estados visuais por slide
             switch(currentSlide) {
-                case 0:
+                case 0: // Apresentação da Caridade
                     statusDemo.style.display = "none";
                     gmImg.src = "assets/game-master/game_master_olhos_fechados.png";
                     break;
 
-                case 1:
+                case 1: // Explicação das barras — estado inicial (tudo cheio)
                     statusDemo.style.display = "flex";
                     playerImg.src = "assets/player1/player1-1material-1moral-3temporal.png";
                     gmImg.src = "assets/game-master/game_master_de_boca_fechada.png";
                     break;
 
-                case 2:
+                case 2: // Purificação — barras viram douradas
                     statusDemo.style.display = "flex";
-                    barBlue.classList.add("best");
-                    barPink.classList.add("best");
-                    barGreen.classList.add("best");
-                    playerImg.src = "assets/player1/best-player1.png"; 
+                    barBlue.className = "preview-bar bar-blue";
+                    barPink.className = "preview-bar bar-virtude";
+                    barGreen.className = "preview-bar bar-virtude";
+                    playerImg.src = "assets/player1/best-player1.png";
                     gmImg.src = "assets/game-master/game_master_sorriso_largo.png";
                     break;
 
-                case 3:
+                case 3: // Agravamento — barras escurecem
                     statusDemo.style.display = "flex";
-                    barBlue.classList.add("worst");
-                    barPink.classList.add("worst");
-                    barGreen.classList.add("worst");
-                    playerImg.src = "assets/player1/worst-player1.png"; 
+                    barBlue.className = "preview-bar bar-blue";
+                    barPink.className = "preview-bar bar-moral-agravado";
+                    barGreen.className = "preview-bar bar-material-agravado";
+                    playerImg.src = "assets/player1/worst-player1.png";
                     gmImg.src = "assets/game-master/game_master_refletindo.png";
+                    break;
+
+                case 4: // Regra final — ascensão ou umbral
+                    statusDemo.style.display = "none";
+                    gmImg.src = "assets/game-master/game_master_olhos_fechados.png";
                     break;
             }
 
