@@ -100,9 +100,9 @@ const fase3 = {
 
 // 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE
 const introsCaridade = {
-    1: "Saudações, viajantes da matéria. Iniciamos a vossa jornada testando a base de toda a existência... O nada pode criar alguma coisa? Estará o homem por sua conta própria, ou existe uma inteligência suprema governando o infinito cósmico? Vamos falar sobre Deus.",
-    2: "Muito bem... O tempo avança e a vossa carne desgasta-se. Entramos agora na segunda etapa da vossa encarnação. O que define quem tu és quando os batimentos param? O corpo é apenas a casca, mas o progresso pertence à Alma e à sua Evolução contínua.",
-    3: "Chegastes ao limiar do tempo terreno. A grande transição aproxima-se. Olhai para além do vosso próprio umbigo: será a Terra o único grão de areia abençoado com a vida? O Universo abre as portas para a Pluralidade dos Mundos. Esta é a vossa prova final!"
+    1: "Saudações, mentes inquietas! Iniciamos a vossa jornada desafiando a vossa própria inércia. O Universo move-se numa engrenagem perfeita, mas qual é a vossa quota de responsabilidade nesse mecanismo cósmico? Estaremos na Terra apenas para consumir o tempo, ou existe um propósito oculto em cada gota de suor? Olhai para dentro de vós: o progresso não é um acidente, é uma escolha. Vamos testar a vossa visão sobre a Criação, as Leis Celestiais e o Trabalho.",
+    2: "Muito bem... Mas o conhecimento sem exemplo é apenas uma casca vazia. Para entenderdes a força do porvir, precisais decifrar as pegadas daqueles que rasgaram as sombras do passado. Espíritos que, mesmo no calor da juventude, na pobreza ou limitados pela carne doente, ergueram faróis indestrutíveis de transformação. Quem foram os verdadeiros operários da luz quando a noite parecia mais densa? Preparai-vos, pois as respostas exigem discernimento absoluto. Entramos na era dos Obreiros do Senhor.",
+    3: "Chegastes ao limiar da vossa encarnação nesta noite. Olhai ao vosso redor: o mundo ruge com as dores da fome, da obsessão, do orgulho e do desespero. Diante das feridas abertas da alma humana, qual será a vossa postura? A Doutrina não vos foi entregue para ser um escudo estático de erudição, mas uma ferramenta viva de cura. É hora de decidir se sois apenas espectadores do tapete da vida ou os caravaneiros da transformação. A vossa última e mais complexa prova começa agora!"
 };
 
 let rodadaAtual = 1; // Começa na fase 1 (fases são 1, 2 e 3)
