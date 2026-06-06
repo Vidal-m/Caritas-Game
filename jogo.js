@@ -105,6 +105,8 @@ const introsCaridade = {
     3: "Chegastes ao limiar do tempo terreno. A grande transição aproxima-se. Olhai para além do vosso próprio umbigo: será a Terra o único grão de areia abençoado com a vida? O Universo abre as portas para a Pluralidade dos Mundos. Esta é a vossa prova final!"
 };
 
+let rodadaAtual = 0;
+
 class Player {
     constructor(id) {
         this.id = id;
@@ -250,18 +252,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- CONTROLO SE A RODADA DO TABULEIRO AVANÇOU ECONOMICAMENTE ---
         // Se o player ativo está numa fase acima da fase controlada pelo tabuleiro, atualizamos a fase global
-        if (jog.fase_atual > faseGlobalAtual) {
-            faseGlobalAtual = jog.fase_atual;
-            contadorFase.textContent = `Fase ${faseGlobalAtual}`;
-            
-            // Trava o turno, mostra a Caridade e só depois renderiza a pergunta
-            verificarEMostrarIntroCaridade(faseGlobalAtual, () => {
-                continuarRenderizacaoTurno(jog);
-            });
+        let novaRodada = obterRodadaGlobal();
+
+        if (novaRodada > rodadaAtual) {
+            rodadaAtual = novaRodada;
+            contadorFase.textContent = `Rodada ${rodadaAtual + 1}`;
+
+            verificarEMostrarIntroCaridade(
+                rodadaAtual,
+                () => continuarRenderizacaoTurno(jog)
+            );
+
             return;
         }
 
         continuarRenderizacaoTurno(jog);
+    }
+
+    function obterRodadaGlobal() {
+        let ativos = listaJogadores.filter(
+            p => p.point_temporal > 0
+        );
+
+        if (ativos.length === 0)
+            return 3;
+
+        return Math.min(
+            ...ativos.map(p => p.index_pergunta)
+        );
     }
 
     function continuarRenderizacaoTurno(jog) {
@@ -409,8 +427,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // 🔥 INICIALIZAÇÃO DO JOGO: O jogo agora começa disparando a Intro da Fase 1 automaticamente!
-    contadorFase.textContent = `Fase ${faseGlobalAtual}`;
-    verificarEMostrarIntroCaridade(faseGlobalAtual, () => {
+    contadorFase.textContent = `Rodada ${rodadaAtual + 1}`;
+    verificarEMostrarIntroCaridade(rodadaAtual + 1, () => {
         renderizarTurno();
     });
 });
