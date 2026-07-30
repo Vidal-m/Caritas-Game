@@ -1,2 +1,2 @@
 # Caritas-Game
-Um jogo Educativo sobre a prática da caridade
+Um jogo Educativo sobre a prática da caridade.
