@@ -315,13 +315,21 @@ document.addEventListener("DOMContentLoaded", () => {
             painelJogadores.classList.add("hidden");
             caixaPergunta.classList.add("no-topo");
             
+            // 1. Cria uma cópia do array para não alterar a ordem original no banco
+            let opcoesBaralhadas = [...perguntaAtualValida.opcoes];
+            
+            // 2. Baralha a cópia usando o algoritmo Fisher-Yates
+            for (let i = opcoesBaralhadas.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opcoesBaralhadas[i], opcoesBaralhadas[j]] = [opcoesBaralhadas[j], opcoesBaralhadas[i]];
+            }
+
             const botoes = gridAlternativas.querySelectorAll(".option-btn");
             botoes.forEach((btn, idx) => {
-                // Sorteia ou distribui as opções
-                let textoOpcao = perguntaAtualValida.opcoes[idx];
+                // 3. Usa o array baralhado em vez do original
+                let textoOpcao = opcoesBaralhadas[idx];
                 btn.textContent = textoOpcao ? textoOpcao : "";
                 
-                // Se o botão estiver vazio (menos de 4 opções), esconde-o
                 if (btn.textContent === "") {
                     btn.style.display = "none";
                 } else {

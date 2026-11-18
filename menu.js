@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const val = parseInt(playersInput.value, 10);
         
         // Ativa o botão apenas se estiver entre 2 e 6 jogadores conforme os requisitos
-        if (val >= 2 && val <= 6) {
+        if (val >= 1 && val <= 6) {
             btnStart.classList.add("ready");
             btnStart.removeAttribute("disabled");
         } else {
