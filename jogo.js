@@ -27,10 +27,11 @@ const fase3 = {
 };
 
 // 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE
+// 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE (VERSÃO RESUMIDA)
 const introsCaridade = {
-    1: "Saudações, mentes inquietas! Iniciamos a vossa jornada desafiando a vossa própria inércia. O Universo move-se numa engrenagem perfeita, mas qual é a vossa quota de responsabilidade nesse mecanismo cósmico? Estaremos na Terra apenas para consumir o tempo, ou existe um propósito oculto em cada gota de suor? Olhai para dentro de vós: o progresso não é um acidente, é uma escolha. Vamos testar a vossa visão sobre a Criação, as Leis Celestiais e o Trabalho.",
-    2: "Muito bem... Mas o conhecimento sem exemplo é apenas uma casca vazia. Para entenderdes a força do porvir, precisais decifrar as pegadas daqueles que rasgaram as sombras do passado. Espíritos que, mesmo no calor da juventude, na pobreza ou limitados pela carne doente, ergueram faróis indestrutíveis de transformação. Quem foram os verdadeiros operários da luz quando a noite parecia mais densa? Preparai-vos, pois as respostas exigem discernimento absoluto. Entramos na era dos Obreiros do Senhor.",
-    3: "Chegastes ao limiar da vossa encarnação nesta noite. Olhai ao vosso redor: o mundo ruge com as dores da fome, da obsessão, do orgulho e do desespero. Diante das feridas abertas da alma humana, qual será a vossa postura? A Doutrina não vos foi entregue para ser um escudo estático de erudição, mas uma ferramenta viva de cura. É hora de decidir se sois apenas espectadores do tapete da vida ou os caravaneiros da transformação. A vossa última e mais complexa prova começa agora!"
+    1: "O campo está pronto e a colheita chama por vós. Mas dizei-me: quem de vós está realmente disposto a servir, e quem aguarda o momento perfeito? Vamos testar a vossa verdadeira disposição para o trabalho no bem!",
+    2: "O dia avança e a seara exige braços firmes. Vimos os que chegam cedo, os que debatem teorias e os que hesitam. Quem foram os operários que compreenderam o verdadeiro valor da oportunidade? O discernimento vos guiará.",
+    3: "Chegastes ao termo desta lavoura. A última hora chegou, e com ela o acerto de contas. Não conta apenas o tempo que passastes, mas a vossa disposição de responder ao chamado. A vossa prova final começa agora!"
 };
 
 let rodadaAtual = 1; // Começa na fase 1 (fases são 1, 2 e 3)

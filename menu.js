@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btnStart.addEventListener("click", () => {
         // Guardar as configurações para serem recuperadas no tabuleiro do jogo
-        localStorage.setItem("caritas_total_jogadores", playersInput.value);
+        localStorage.setItem("caritas_total_jogadores", 1);
         localStorage.setItem("caritas_tema", "1"); // Trabalhadores de Jesus
         localStorage.setItem("caritas_nivel", "1"); // Nível Base fixo
 
