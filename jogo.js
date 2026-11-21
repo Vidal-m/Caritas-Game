@@ -1,32 +1,31 @@
 // --- BANCO DE DADOS DE QUESTÕES FILOSÓFICAS ---
 const fase1 = {
-    'Na história assistida, qual era o principal problema que o supervisor enfrentava no início do dia na fazenda?': [
-        'Havia muito trabalho a ser feito e pouquíssima gente disposta.',
-        'Os trabalhadores chegaram todos atrasados e exigiram um salário maior.',
-        'As ferramentas de trabalho haviam desaparecido do depósito da fazenda.',
-        'O tempo mudou subitamente e impediu a realização da colheita.'
+    'Na  história que acabamos de assistir, o que o supervisor estava procura?': [
+        'Pessoas dispostas a trabalhar.',
+        'Pessoas que soubessem dançar.',
+        'Pessoas que tivessem um currículo de cinquenta páginas. ',
+        'Pessoas que trouxessem o almoço para a equipe.'
     ]
 };
 
 const fase2 = {
-    'Como se comportou o trabalhador que foi chamado mas alegava estar sempre esperando o momento certo?': [
-        'Acabou adiando sucessivamente e não aproveitou a oportunidade daquele momento.',
-        'Trabalhou com afinco assim que o supervisor lhe deu uma nova ferramenta.',
-        'Decidiu ajudar os colegas mais velhos nas tarefas mais pesadas da colheita.',
-        'Foi promovido a supervisor após demonstrar grande paciência e cautela.'
+    'Os trabalhadores foram chamados...': [
+        'Em diferentes momentos do dia.',
+        'Todos exatamente na mesma hora.',
+        'Somente depois do almoço.',
+        'Quando o supervisor finalmente lembrou que precisava deles.'
     ]
 };
 
 const fase3 = {
-    'Qual foi o critério utilizado pelo supervisor para definir a recompensa dos trabalhadores no final?': [
-        'A disposição em servir e responder ao chamado, independentemente de terem chegado mais cedo ou mais tarde.',
-        'A quantidade exata de horas acumuladas de trabalho pesado debaixo do sol.',
-        'O nível de experiência técnica e o currículo profissional apresentado na contratação.',
-        'A quantidade de ferramentas que cada um conseguiu carregar para o campo.'
+    'O que aconteceu com aquele trabalhador que estava sempre esperando o momento certo?': [
+        'Acabou não aproveitando a oportunidade daquele momento.',
+        'Foi promovido a supervisor.',
+        'Ganhou férias antecipadas.',
+        'Foi escolhido para ser o trabalhador do mês.'
     ]
 };
 
-// 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE
 // 🌟 TEXTOS DE INTRODUÇÃO DA CARIDADE PARA CADA FASE (VERSÃO RESUMIDA)
 const introsCaridade = {
     1: "O campo está pronto e a colheita chama por vós. Mas dizei-me: quem de vós está realmente disposto a servir, e quem aguarda o momento perfeito? Vamos testar a vossa verdadeira disposição para o trabalho no bem!",
